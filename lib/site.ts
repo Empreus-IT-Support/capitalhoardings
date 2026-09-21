@@ -28,6 +28,7 @@ export const services = [
   {
     slug: "internal",
     title: "Internal Hoarding",
+    image: "/images/service-internal.jpg",
     summary:
       "Clean, freestanding hoarding for works inside occupied buildings — retail fit-outs, refurbishments, tenancy works and commercial upgrades.",
     points: [
@@ -41,6 +42,7 @@ export const services = [
   {
     slug: "external",
     title: "External Hoarding",
+    image: "/images/service-external.jpg",
     summary:
       "Robust site hoarding for construction sites and developments, engineered for local wind loads and public protection.",
     points: [
@@ -54,6 +56,7 @@ export const services = [
   {
     slug: "branded",
     title: "Branded Hoarding",
+    image: "/images/service-branded.jpg",
     summary:
       "Turn temporary site boundaries into a professional presentation of your project with printed graphics, signage and lighting.",
     points: [
@@ -69,26 +72,32 @@ export const services = [
 export const whyUs = [
   {
     title: "Local knowledge",
+    icon: "IconLocation",
     body: "Proudly servicing the ACT and Southern NSW.",
   },
   {
     title: "Quality workmanship",
+    icon: "IconCraft",
     body: "Professional installation with attention to detail.",
   },
   {
     title: "Reliable service",
+    icon: "IconClock",
     body: "We understand the importance of keeping construction projects on schedule.",
   },
   {
     title: "Practical solutions",
+    icon: "IconPanel",
     body: "Hoarding designed around the needs of your site.",
   },
   {
     title: "Safety focused",
+    icon: "IconShield",
     body: "We take site safety, security and public protection seriously.",
   },
   {
     title: "Professional presentation",
+    icon: "IconSparkle",
     body: "Clean, well-installed hoarding that reflects positively on your project.",
   },
 ] as const;

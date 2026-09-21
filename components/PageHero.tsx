@@ -1,32 +1,44 @@
+import Image from "next/image";
+
 export default function PageHero({
   eyebrow,
   title,
   intro,
+  image,
+  imageAlt,
 }: {
   eyebrow: string;
   title: string;
   intro?: string;
+  image: string;
+  imageAlt: string;
 }) {
   return (
     <section className="relative overflow-hidden bg-navy-ink">
-      {/* Isometric band motif lifted from the logo mark */}
+      <Image
+        src={image}
+        alt={imageAlt}
+        fill
+        priority
+        sizes="100vw"
+        className="object-cover opacity-85"
+      />
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-y-0 right-0 w-1/2 opacity-[0.16]"
-        style={{
-          backgroundImage:
-            "repeating-linear-gradient(-45deg, #62B6E4 0 2px, transparent 2px 22px)",
-        }}
+        className="absolute inset-0 bg-gradient-to-r from-navy-black via-navy-ink/76 to-navy-ink/22"
       />
-      <div className="relative mx-auto max-w-7xl px-6 py-20 sm:py-24">
-        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-sky">
+      <div className="panel-seams absolute inset-0" aria-hidden />
+      <div className="relative mx-auto max-w-7xl px-6 pb-16 pt-20 sm:pb-20 sm:pt-28">
+        <p className="eyebrow flex items-center gap-3 text-sky">
+          <span className="h-1.5 w-1.5 rotate-45 bg-sky" aria-hidden />
           {eyebrow}
         </p>
-        <h1 className="mt-4 max-w-4xl text-4xl text-white sm:text-5xl">{title}</h1>
+        <h1 className="text-display-sm mt-5 max-w-4xl text-white">{title}</h1>
         {intro && (
           <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/75">{intro}</p>
         )}
       </div>
+      <div className="stripe-rule" aria-hidden />
     </section>
   );
 }

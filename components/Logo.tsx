@@ -12,6 +12,7 @@ export function LogoMark({ className = "" }: { className?: string }) {
       alt=""
       width={660}
       height={704}
+      sizes="48px"
       aria-hidden
       className={className}
     />
@@ -47,8 +48,9 @@ export default function Logo({
       <Image
         src="/images/logo.png"
         alt="Capital Hoardings"
-        width={3247}
-        height={704}
+        width={1200}
+        height={260}
+        sizes="220px"
         priority
         className="h-9 w-auto sm:h-11"
       />

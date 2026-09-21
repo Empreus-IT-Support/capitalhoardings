@@ -27,6 +27,29 @@ Every word of copy is taken from the client's brief deck
 Copy lives in `lib/site.ts` where it is reused across pages; longer prose sits in
 the page files.
 
+## Design
+
+The site leans on one content-informed motif: **the hoarding panel**. Hoarding is
+modular panels bolted edge to edge, so the design repeats seams, hazard
+diagonals and hard panel edges rather than generic rounded cards.
+
+- `.stripe-rule` — hazard diagonal, used as a section divider under the header
+  and above the footer.
+- `.panel-seams` — faint vertical seams over dark sections, echoing panel joins.
+- `.hazard-wash` — diagonal texture on navy panels.
+- Grids are built from `gap-px` over a `bg-line` parent, so cards butt together
+  with a hairline seam instead of floating apart.
+- Corners are square throughout. No rounded cards, no drop-shadow "floating" UI.
+
+Type is Barlow Condensed (display) over Inter (body) — condensed headlines carry
+the industrial tone and let the fluid `.text-display` scale run to 96px without
+wrapping awkwardly.
+
+Beyond the deck, the site adds a capability marquee, a spec/stat band drawn from
+the TITAN figures, and a five-step **Assess → Configure → Install → Adapt →
+Remove** process section. The brief describes that sequence in prose ("from site
+setup and installation through to removal") but never lays it out.
+
 ## Brand
 
 Colours are sampled from the supplied logo artwork and defined once in
@@ -44,12 +67,39 @@ ground knocked out, so they sit cleanly on both white and navy. If the client ca
 supply vector artwork (`.ai`, `.eps` or `.svg`), swap it in — it will render
 sharper at large sizes.
 
+## Photography — placeholders, must be replaced
+
+The brief marks every image "to be provided", so the site currently runs on
+**stock placeholders** from [Unsplash](https://unsplash.com/license) (free for
+commercial use, no attribution required). They are real construction and
+hoarding photos chosen to sit on the navy palette, so the client can judge the
+layout — but they are **not Capital Hoardings jobs** and must not go live as if
+they were.
+
+They live in `public/images/` and every one is rendered through
+`components/Photo.tsx`, which carries a `note` prop recording the shot the
+client should supply:
+
+| File | Used on | Replace with |
+| --- | --- | --- |
+| `hero.jpg` | home hero | Capital Hoardings hoarding on a live site |
+| `service-internal.jpg` | home, /services | an internal fit-out installation |
+| `service-external.jpg` | home, /services, /services hero | external site hoarding |
+| `service-branded.jpg` | home, /services, /system | branded/printed hoarding |
+| `about-team.jpg` | /about | the Capital Hoardings crew |
+| `about-install.jpg` | /about, /about hero | installation in progress |
+| `system-panels.jpg` | /system | TITAN panel detail |
+| `system-apps.jpg` | home, /system hero | a TITAN installation |
+| `cta-site.jpg` | CTA band (all pages) | a signature completed project |
+| `contact-site.jpg` | /contact hero | any strong site shot |
+| `project-01…03.jpg` | /about gallery, /contact | three completed projects |
+
+Swapping one is a single-line change — drop the new file in at the same name, or
+point the `src` at a new one.
+
 ## Outstanding — needs the client
 
-These are the gaps in the brief, all marked in the deck as "to be provided":
-
-1. **Photography.** Every image position renders a `<PhotoSlot>` placeholder
-   describing the shot required. Replace each with `next/image` once photos land.
+1. **Photography.** See above — placeholders are in place, real photos needed.
 2. **Phone number.** The deck says "P: TBC". `lib/site.ts` has `phone: null`,
    which hides phone links site-wide and shows "TBC". Set `phone` and
    `phoneDisplay` when confirmed.

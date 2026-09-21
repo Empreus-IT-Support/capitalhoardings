@@ -9,13 +9,15 @@
   --navy: #11427a;
   --navy-deep: #0c3159;
   --navy-ink: #071f3a;
+  --navy-black: #04121f;
   --sky: #62b6e4;
+  --sky-bright: #8ccdf0;
   --sky-soft: #e8f3fb;
 
   --background: #ffffff;
   --foreground: #1c2733;
   --muted: #5b6b7c;
-  --panel: #f4f7fa;
+  --panel: #f2f6fa;
   --line: #dde5ed;
 
   color-scheme: light;
@@ -27,10 +29,12 @@
   --color-navy: #11427a;
   --color-navy-deep: #0c3159;
   --color-navy-ink: #071f3a;
+  --color-navy-black: #04121f;
   --color-sky: #62b6e4;
+  --color-sky-bright: #8ccdf0;
   --color-sky-soft: #e8f3fb;
   --color-muted: #5b6b7c;
-  --color-panel: #f4f7fa;
+  --color-panel: #f2f6fa;
   --color-line: #dde5ed;
 
   --font-sans: var(--font-inter), "Helvetica Neue", Arial, sans-serif;
@@ -63,8 +67,8 @@ body {
     font-family: var(--font-display);
     color: var(--navy-ink);
     font-weight: 700;
-    line-height: 1.1;
-    letter-spacing: -0.02em;
+    line-height: 1.04;
+    letter-spacing: -0.015em;
   }
 
   ::selection {
@@ -79,7 +83,35 @@ body {
   }
 }
 
-/* Diagonal hazard-stripe rule — a nod to site hoarding, used sparingly */
+@layer utilities {
+  /* Fluid display type — the site leans on scale for impact */
+  .text-display {
+    font-size: clamp(2.75rem, 7.4vw, 6rem);
+    line-height: 0.94;
+    letter-spacing: -0.03em;
+  }
+
+  .text-display-sm {
+    font-size: clamp(2rem, 4.4vw, 3.4rem);
+    line-height: 1.02;
+    letter-spacing: -0.025em;
+  }
+
+  .eyebrow {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.26em;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Motif: the hoarding panel.
+   Hoarding is modular panels bolted edge to edge, so seams, counterweight
+   feet and hazard diagonals carry through the whole site.
+   ------------------------------------------------------------------ */
+
+/* Diagonal hazard-stripe rule — section divider */
 .stripe-rule {
   height: 6px;
   background-image: repeating-linear-gradient(
@@ -89,14 +121,101 @@ body {
   );
 }
 
-/* Placeholder tile shown where client photography will be dropped in */
-.photo-slot {
-  background-color: var(--sky-soft);
+/* Vertical panel seams, laid over dark sections */
+.panel-seams {
+  background-image: repeating-linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.07) 0 1px,
+    transparent 1px 132px
+  );
+}
+
+/* Faint diagonal texture for dark panels */
+.hazard-wash {
   background-image: repeating-linear-gradient(
     -45deg,
-    rgba(17, 66, 122, 0.06) 0 14px,
-    rgba(17, 66, 122, 0) 14px 28px
+    rgba(98, 182, 228, 0.16) 0 2px,
+    transparent 2px 24px
   );
+}
+
+/* Photo treatment: navy duotone wash so stock imagery sits on brand */
+.photo-wash::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(7, 31, 58, 0.25) 0%,
+    rgba(7, 31, 58, 0.55) 55%,
+    rgba(4, 18, 31, 0.92) 100%
+  );
+  pointer-events: none;
+}
+
+.photo-wash-side::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    rgba(4, 18, 31, 0.94) 0%,
+    rgba(7, 31, 58, 0.82) 42%,
+    rgba(7, 31, 58, 0.42) 100%
+  );
+  pointer-events: none;
+}
+
+/* Cards that behave like panels — lift and reveal on hover */
+.panel-card {
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 0.4s ease;
+}
+
+.panel-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 18px 44px rgba(7, 31, 58, 0.16);
+}
+
+.panel-card img {
+  transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.panel-card:hover img {
+  transform: scale(1.06);
+}
+
+/* Capability marquee */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 42s linear infinite;
+}
+
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* Scroll reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.7s cubic-bezier(0.2, 0.8, 0.2, 1),
+    transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -108,15 +227,17 @@ body {
     transform: none !important;
     transition: none !important;
   }
-}
-
-.reveal {
-  opacity: 0;
-  transform: translateY(18px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
-}
-
-.reveal.is-visible {
-  opacity: 1;
-  transform: none;
+  .marquee-track {
+    animation: none;
+  }
+  .panel-card,
+  .panel-card img {
+    transition: none;
+  }
+  .panel-card:hover {
+    transform: none;
+  }
+  .panel-card:hover img {
+    transform: none;
+  }
 }

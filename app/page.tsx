@@ -1,86 +1,135 @@
+import Image from "next/image";
 import Link from "next/link";
 import CtaBand from "@/components/CtaBand";
-import PhotoSlot from "@/components/PhotoSlot";
+import Marquee from "@/components/Marquee";
+import Photo from "@/components/Photo";
+import Process from "@/components/Process";
 import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
+import StatBand from "@/components/StatBand";
+import * as Icons from "@/components/Icons";
+import { IconArrow } from "@/components/Icons";
 import { services, site, whyUs } from "@/lib/site";
+
+const heroCredentials = [
+  "Freestanding — no ground penetration",
+  "Engineer-certified to AS 4687",
+  "Modular panels, any site layout",
+];
 
 export default function Home() {
   return (
     <>
       {/* ---------------- Hero ---------------- */}
-      <section className="relative overflow-hidden bg-navy-ink">
+      <section className="relative isolate flex min-h-[86vh] items-end overflow-hidden bg-navy-ink">
+        <Image
+          src="/images/hero.jpg"
+          alt="Site hoarding panels enclosing a commercial construction site"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
+        />
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 opacity-[0.14]"
-          style={{
-            backgroundImage:
-              "repeating-linear-gradient(-45deg, #62B6E4 0 3px, transparent 3px 26px)",
-          }}
+          className="absolute inset-0 bg-gradient-to-r from-navy-black via-navy-ink/78 to-navy-ink/18"
         />
-        <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-6 py-20 lg:grid-cols-[1.1fr_0.9fr] lg:py-28">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-sky">
-              Specialist hoarding — {site.region}
-            </p>
-            <h1 className="mt-5 text-5xl text-white sm:text-6xl lg:text-7xl">
-              Building protection.
-              <br />
-              <span className="text-sky">Delivering confidence.</span>
-            </h1>
-            <p className="mt-7 max-w-xl text-lg leading-relaxed text-white/75">
-              Capital Hoardings provides practical, professional and reliable hoarding
-              solutions for construction sites, commercial developments and projects of
-              all sizes across the ACT and Southern NSW.
-            </p>
-            <div className="mt-10 flex flex-wrap gap-4">
-              <Link
-                href="/contact"
-                className="rounded bg-sky px-8 py-3.5 text-sm font-semibold uppercase tracking-wider text-navy-ink transition-colors hover:bg-white"
-              >
-                Request a quote
-              </Link>
-              <Link
-                href="/system"
-                className="rounded border border-white/30 px-8 py-3.5 text-sm font-semibold uppercase tracking-wider text-white transition-colors hover:border-white hover:bg-white/10"
-              >
-                The TITAN system
-              </Link>
-            </div>
+        <div className="panel-seams absolute inset-0" aria-hidden />
+
+        <div className="relative mx-auto w-full max-w-7xl px-6 pb-14 pt-32 sm:pb-20">
+          <p className="eyebrow flex items-center gap-3 text-sky">
+            <span className="h-1.5 w-1.5 rotate-45 bg-sky" aria-hidden />
+            Specialist hoarding — {site.region}
+          </p>
+
+          <h1 className="text-display mt-6 max-w-5xl text-white">
+            Building protection.
+            <br />
+            <span className="text-sky">Delivering confidence.</span>
+          </h1>
+
+          <p className="mt-8 max-w-xl text-lg leading-relaxed text-white/75">
+            Practical, professional and reliable hoarding for construction sites,
+            commercial developments and projects of all sizes across the ACT and
+            Southern NSW.
+          </p>
+
+          <div className="mt-10 flex flex-wrap gap-4">
+            <Link
+              href="/contact"
+              className="group inline-flex items-center gap-3 bg-sky px-8 py-4 text-sm font-semibold uppercase tracking-wider text-navy-ink transition-colors hover:bg-white"
+            >
+              Request a quote
+              <IconArrow className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Link>
+            <Link
+              href="/system"
+              className="inline-flex items-center border border-white/30 px-8 py-4 text-sm font-semibold uppercase tracking-wider text-white transition-colors hover:border-sky hover:bg-white/10"
+            >
+              The TITAN system
+            </Link>
           </div>
 
-          <PhotoSlot
-            label="Hero image — installed hoarding on site (to be provided)"
-            className="min-h-[320px] border-white/15 bg-white/5 lg:min-h-[420px]"
-          />
+          {/* Credential strip — sits on the hero's bottom edge like a panel rail */}
+          <ul className="mt-14 grid gap-px border-t border-white/15 bg-white/10 sm:grid-cols-3">
+            {heroCredentials.map((item) => (
+              <li
+                key={item}
+                className="flex items-center gap-3 bg-navy-ink/80 px-5 py-4 text-sm text-white/80 backdrop-blur-sm"
+              >
+                <span className="h-1.5 w-1.5 shrink-0 rotate-45 bg-sky" aria-hidden />
+                {item}
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
+      <Marquee />
+
       {/* ---------------- Services ---------------- */}
-      <section className="mx-auto max-w-7xl px-6 py-20 sm:py-24">
-        <SectionHeading
-          eyebrow="What we do"
-          title="Hoarding solutions built around your site"
-          intro="From standard construction hoarding through to branded installations, we deliver the right solution for the job — installed properly, on time and to a high standard."
-        />
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
+      <section className="mx-auto max-w-7xl px-6 py-20 sm:py-28">
+        <div className="flex flex-wrap items-end justify-between gap-8">
+          <SectionHeading
+            eyebrow="What we do"
+            title="Hoarding solutions built around your site"
+            intro="From standard construction hoarding through to branded installations — installed properly, on time and to a high standard."
+          />
+          <Link
+            href="/services"
+            className="group hidden items-center gap-2 text-sm font-semibold uppercase tracking-wider text-navy hover:text-sky lg:inline-flex"
+          >
+            All services
+            <IconArrow className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+          </Link>
+        </div>
+
+        <div className="mt-14 grid gap-6 md:grid-cols-3">
           {services.map((service, i) => (
-            <Reveal key={service.slug} delay={i * 90}>
+            <Reveal key={service.slug} delay={i * 100}>
               <Link
                 href={`/services#${service.slug}`}
-                className="group flex h-full flex-col rounded border border-line bg-white transition-shadow hover:shadow-[0_12px_32px_rgba(7,31,58,0.1)]"
+                className="panel-card group relative flex h-[26rem] flex-col justify-end overflow-hidden"
               >
-                <PhotoSlot
-                  label={`${service.title} photo`}
-                  className="min-h-[180px] rounded-none rounded-t border-0 border-b"
+                <Photo
+                  src={service.image}
+                  alt={service.title}
+                  note={`Replace with a Capital Hoardings ${service.title.toLowerCase()} project photo`}
+                  overlay="bottom"
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  className="absolute inset-0"
                 />
-                <div className="flex flex-1 flex-col p-7">
-                  <h3 className="text-2xl">{service.title}</h3>
-                  <p className="mt-3 flex-1 text-sm leading-relaxed text-muted">
+                <div className="relative z-10 p-7">
+                  <span className="font-display text-sm font-bold text-sky">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <h3 className="mt-2 text-3xl text-white">{service.title}</h3>
+                  <p className="mt-3 text-sm leading-relaxed text-white/75">
                     {service.summary}
                   </p>
-                  <span className="mt-6 text-xs font-semibold uppercase tracking-[0.18em] text-navy group-hover:text-sky">
-                    Learn more →
+                  <span className="mt-6 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-sky">
+                    Learn more
+                    <IconArrow className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </span>
                 </div>
               </Link>
@@ -89,62 +138,82 @@ export default function Home() {
         </div>
       </section>
 
+      <StatBand />
+
       {/* ---------------- Why us ---------------- */}
       <section className="bg-panel">
-        <div className="mx-auto max-w-7xl px-6 py-20 sm:py-24">
+        <div className="mx-auto max-w-7xl px-6 py-20 sm:py-28">
           <SectionHeading
             eyebrow="Why Capital Hoardings?"
             title="A responsive local team you can rely on"
             intro="We work closely with builders, developers, contractors and project managers to deliver hoarding that suits each site — and keeps the project moving."
           />
-          <div className="mt-12 grid gap-px overflow-hidden rounded border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
-            {whyUs.map((item, i) => (
-              <Reveal key={item.title} delay={i * 60} className="bg-white">
-                <div className="h-full p-8">
-                  <span className="font-display text-sm font-bold text-sky">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <h3 className="mt-3 text-xl">{item.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted">{item.body}</p>
-                </div>
-              </Reveal>
-            ))}
+          <div className="mt-14 grid gap-px bg-line sm:grid-cols-2 lg:grid-cols-3">
+            {whyUs.map((item, i) => {
+              const Icon = Icons[item.icon as keyof typeof Icons];
+              return (
+                <Reveal key={item.title} delay={i * 70} className="bg-white">
+                  <div className="h-full p-9">
+                    <span className="flex h-12 w-12 items-center justify-center bg-navy text-sky">
+                      <Icon className="h-6 w-6" />
+                    </span>
+                    <h3 className="mt-6 text-xl">{item.title}</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-muted">{item.body}</p>
+                  </div>
+                </Reveal>
+              );
+            })}
           </div>
         </div>
       </section>
 
+      <Process />
+
       {/* ---------------- TITAN teaser ---------------- */}
-      <section className="mx-auto grid max-w-7xl items-center gap-12 px-6 py-20 sm:py-24 lg:grid-cols-2">
-        <PhotoSlot
-          label="TITAN hoarding installation photo (to be provided)"
-          className="min-h-[340px]"
-        />
-        <div>
-          <SectionHeading
-            eyebrow="Our system"
-            title="Advanced hoarding. Engineered for Australian conditions."
-            intro="We utilise the TITAN Hoarding System — an Australian-made, modular, freestanding hoarding system designed to provide effective site separation and protection without the need for traditional ground penetration or ceiling fixings."
+      <section className="relative overflow-hidden bg-navy-ink">
+        <div className="hazard-wash absolute inset-0 opacity-60" aria-hidden />
+        <div className="relative mx-auto grid max-w-7xl items-center gap-14 px-6 py-20 sm:py-28 lg:grid-cols-2">
+          <Photo
+            src="/images/system-apps.jpg"
+            alt="Modular hoarding panels installed around an active construction site"
+            note="Replace with a TITAN installation photo"
+            className="h-[26rem] lg:h-[32rem]"
+            sizes="(max-width: 1024px) 100vw, 50vw"
           />
-          <ul className="mt-8 space-y-3">
-            {[
-              "Freestanding — no ground penetration or ceiling fixings",
-              "Modular panels configured to any site layout",
-              "Engineer-certified, designed to comply with AS 4687",
-              "Fire-retardant panel options available",
-              "An ideal surface for project branding and graphics",
-            ].map((point) => (
-              <li key={point} className="flex gap-3 text-sm text-muted">
-                <span className="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-sky" />
-                {point}
-              </li>
-            ))}
-          </ul>
-          <Link
-            href="/system"
-            className="mt-9 inline-block rounded bg-navy px-8 py-3.5 text-sm font-semibold uppercase tracking-wider text-white transition-colors hover:bg-navy-deep"
-          >
-            Explore the TITAN system
-          </Link>
+          <div>
+            <SectionHeading
+              eyebrow="Our system"
+              title="Advanced hoarding. Engineered for Australian conditions."
+              intro="We utilise the TITAN Hoarding System — Australian-made, modular and freestanding, providing effective site separation without traditional ground penetration or ceiling fixings."
+              tone="dark"
+            />
+            <ul className="mt-9 grid gap-px bg-white/15 sm:grid-cols-2">
+              {[
+                { icon: "IconStand", label: "Freestanding" },
+                { icon: "IconModular", label: "Modular panels" },
+                { icon: "IconShield", label: "AS 4687 certified" },
+                { icon: "IconFlame", label: "Fire-retardant options" },
+              ].map((item) => {
+                const Icon = Icons[item.icon as keyof typeof Icons];
+                return (
+                  <li
+                    key={item.label}
+                    className="flex items-center gap-4 bg-navy-ink px-5 py-5 text-sm text-white/85"
+                  >
+                    <Icon className="h-6 w-6 shrink-0 text-sky" />
+                    {item.label}
+                  </li>
+                );
+              })}
+            </ul>
+            <Link
+              href="/system"
+              className="group mt-10 inline-flex items-center gap-3 bg-sky px-8 py-4 text-sm font-semibold uppercase tracking-wider text-navy-ink transition-colors hover:bg-white"
+            >
+              Explore the TITAN system
+              <IconArrow className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Link>
+          </div>
         </div>
       </section>
 

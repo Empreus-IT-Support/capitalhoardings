@@ -13,27 +13,29 @@ export default function SectionHeading({
 }) {
   const centred = align === "center";
   return (
-    <div className={`${centred ? "mx-auto max-w-3xl text-center" : "max-w-3xl"}`}>
+    <div className={centred ? "mx-auto max-w-3xl text-center" : "max-w-3xl"}>
       {eyebrow && (
         <p
-          className={`text-xs font-semibold uppercase tracking-[0.22em] ${
-            tone === "dark" ? "text-sky" : "text-navy/60"
+          className={`eyebrow flex items-center gap-3 ${centred ? "justify-center" : ""} ${
+            tone === "dark" ? "text-sky" : "text-navy/55"
           }`}
         >
+          <span
+            className={`h-1.5 w-1.5 rotate-45 ${tone === "dark" ? "bg-sky" : "bg-navy/40"}`}
+            aria-hidden
+          />
           {eyebrow}
         </p>
       )}
       <h2
-        className={`mt-3 text-3xl sm:text-4xl ${
-          tone === "dark" ? "text-white" : ""
-        }`}
+        className={`text-display-sm mt-4 ${tone === "dark" ? "text-white" : ""}`}
       >
         {title}
       </h2>
       {intro && (
         <p
-          className={`mt-5 text-base leading-relaxed ${
-            tone === "dark" ? "text-white/75" : "text-muted"
+          className={`mt-5 text-base leading-relaxed sm:text-lg ${
+            tone === "dark" ? "text-white/70" : "text-muted"
           }`}
         >
           {intro}

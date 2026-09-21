@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import ContactForm from "@/components/ContactForm";
 import PageHero from "@/components/PageHero";
-import PhotoSlot from "@/components/PhotoSlot";
+import Photo from "@/components/Photo";
+import { IconLocation, IconPanel, IconShield } from "@/components/Icons";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -11,6 +12,12 @@ export const metadata: Metadata = {
   alternates: { canonical: "/contact" },
 };
 
+const reassurance = [
+  { icon: IconLocation, text: "A local team, servicing the ACT and Southern NSW" },
+  { icon: IconPanel, text: "Hoarding specified around your site, not off a shelf" },
+  { icon: IconShield, text: "Engineer-certified, safety-first installation" },
+];
+
 export default function ContactPage() {
   return (
     <>
@@ -18,17 +25,18 @@ export default function ContactPage() {
         eyebrow="Contact"
         title="Talk to our team about your site"
         intro="Tell us about your project and we'll come back to you with a hoarding solution to suit it."
+        image="/images/contact-site.jpg"
+        imageAlt=""
       />
 
-      <section className="mx-auto grid max-w-7xl gap-14 px-6 py-20 sm:py-24 lg:grid-cols-[1fr_1.4fr]">
+      <section className="mx-auto grid max-w-7xl gap-14 px-6 py-20 sm:py-28 lg:grid-cols-[0.85fr_1.15fr]">
         <div>
-          <h2 className="text-2xl">Get in touch</h2>
-          <dl className="mt-8 space-y-7 text-sm">
-            <div>
-              <dt className="text-xs font-semibold uppercase tracking-[0.18em] text-navy">
-                Phone
-              </dt>
-              <dd className="mt-1 text-muted">
+          <h2 className="text-3xl">Get in touch</h2>
+
+          <dl className="mt-9 grid gap-px bg-line">
+            <div className="bg-white py-5">
+              <dt className="eyebrow text-navy/55">Phone</dt>
+              <dd className="mt-2 text-lg text-foreground">
                 {site.phone ? (
                   <a
                     href={`tel:${site.phone.replace(/\s/g, "")}`}
@@ -41,52 +49,59 @@ export default function ContactPage() {
                 )}
               </dd>
             </div>
-            <div>
-              <dt className="text-xs font-semibold uppercase tracking-[0.18em] text-navy">
-                General enquiries
-              </dt>
-              <dd className="mt-1">
+            <div className="bg-white py-5">
+              <dt className="eyebrow text-navy/55">General enquiries</dt>
+              <dd className="mt-2">
                 <a
                   href={`mailto:${site.email}`}
-                  className="break-all text-muted hover:text-navy"
+                  className="break-all text-lg text-navy hover:text-sky"
                 >
                   {site.email}
                 </a>
               </dd>
             </div>
-            <div>
-              <dt className="text-xs font-semibold uppercase tracking-[0.18em] text-navy">
-                Accounts
-              </dt>
-              <dd className="mt-1">
+            <div className="bg-white py-5">
+              <dt className="eyebrow text-navy/55">Accounts</dt>
+              <dd className="mt-2">
                 <a
                   href={`mailto:${site.accountsEmail}`}
-                  className="break-all text-muted hover:text-navy"
+                  className="break-all text-lg text-navy hover:text-sky"
                 >
                   {site.accountsEmail}
                 </a>
               </dd>
             </div>
-            <div>
-              <dt className="text-xs font-semibold uppercase tracking-[0.18em] text-navy">
-                Servicing
-              </dt>
-              <dd className="mt-1 text-muted">{site.region}</dd>
+            <div className="bg-white py-5">
+              <dt className="eyebrow text-navy/55">Servicing</dt>
+              <dd className="mt-2 text-lg text-foreground">{site.region}</dd>
             </div>
           </dl>
 
-          <PhotoSlot
-            label="Contact page photo (to be provided)"
-            className="mt-10 min-h-[220px]"
+          <ul className="mt-10 space-y-4">
+            {reassurance.map((item) => (
+              <li key={item.text} className="flex items-start gap-4 text-sm text-muted">
+                <item.icon className="mt-0.5 h-6 w-6 shrink-0 text-sky" />
+                {item.text}
+              </li>
+            ))}
+          </ul>
+
+          <Photo
+            src="/images/project-01.jpg"
+            alt="Hoarded construction site frontage"
+            note="Replace with a Capital Hoardings project photo"
+            className="mt-10 h-56"
+            sizes="(max-width: 1024px) 100vw, 35vw"
           />
         </div>
 
-        <div className="rounded border border-line bg-panel p-8 sm:p-10">
-          <h2 className="text-2xl">Send an enquiry</h2>
+        <div className="border border-line bg-panel p-8 sm:p-12">
+          <p className="eyebrow text-navy/55">Enquiry</p>
+          <h2 className="mt-3 text-3xl">Send us the details</h2>
           <p className="mt-3 text-sm text-muted">
             Fill in the form below and a member of our team will get back to you.
           </p>
-          <div className="mt-8">
+          <div className="mt-9">
             <ContactForm />
           </div>
         </div>
