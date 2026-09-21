@@ -3,14 +3,15 @@ import ContactForm from "@/components/ContactForm";
 import PageHero from "@/components/PageHero";
 import Photo from "@/components/Photo";
 import { IconLocation, IconPanel, IconShield } from "@/components/Icons";
+import { JsonLd, breadcrumbs, pageMeta } from "@/lib/seo";
 import { site } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: "Contact",
   description:
     "Talk to Capital Hoardings about your hoarding requirements across the ACT and Southern NSW. Send an enquiry and our team will be in touch.",
-  alternates: { canonical: "/contact" },
-};
+  path: "/contact",
+});
 
 const reassurance = [
   {
@@ -27,6 +28,8 @@ const reassurance = [
 export default function ContactPage() {
   return (
     <>
+      <JsonLd data={breadcrumbs([{ name: "Contact", path: "/contact" }])} />
+
       <PageHero
         eyebrow="Contact"
         title="Talk to our team about your site"

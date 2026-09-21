@@ -6,14 +6,15 @@ import Process from "@/components/Process";
 import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
 import StatBand from "@/components/StatBand";
+import { JsonLd, breadcrumbs, pageMeta } from "@/lib/seo";
 import { site } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: "About Us",
   description:
     "Capital Hoardings is a specialist hoarding construction company servicing the ACT and Southern NSW, delivering practical and professional hoarding solutions for projects of all sizes.",
-  alternates: { canonical: "/about" },
-};
+  path: "/about",
+});
 
 const gallery = [
   { src: "/images/project-01.jpg", alt: "Secured construction site boundary" },
@@ -30,6 +31,8 @@ const gallery = [
 export default function AboutPage() {
   return (
     <>
+      <JsonLd data={breadcrumbs([{ name: "About Us", path: "/about" }])} />
+
       <PageHero
         eyebrow="About us"
         title={site.tagline}

@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ScrollProgress from "@/components/ScrollProgress";
+import { JsonLd, organisationLd, websiteLd } from "@/lib/seo";
 import { site } from "@/lib/site";
 
 const display = Barlow_Condensed({
@@ -46,6 +47,8 @@ export const metadata: Metadata = {
     "Southern NSW",
   ],
   alternates: { canonical: "/" },
+  category: "Construction",
+  formatDetection: { telephone: true, address: false, email: true },
   robots: {
     index: true,
     follow: true,
@@ -64,21 +67,6 @@ export const metadata: Metadata = {
     title: "Capital Hoardings — Site Hoarding, ACT & Southern NSW",
     description: DESCRIPTION,
   },
-};
-
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "GeneralContractor",
-  "@id": `${site.url}/#organization`,
-  name: site.name,
-  url: site.url,
-  description: DESCRIPTION,
-  email: site.email,
-  slogan: site.tagline,
-  areaServed: [
-    { "@type": "AdministrativeArea", name: "Australian Capital Territory" },
-    { "@type": "AdministrativeArea", name: "Southern New South Wales" },
-  ],
 };
 
 export default function RootLayout({
@@ -102,10 +90,7 @@ export default function RootLayout({
         </noscript>
       </head>
       <body className="flex min-h-full flex-col">
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
+        <JsonLd data={[organisationLd, websiteLd]} />
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:rounded focus:bg-navy focus:px-4 focus:py-2 focus:text-white"

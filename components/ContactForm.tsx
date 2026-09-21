@@ -1,45 +1,129 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 type Status = "idle" | "sending" | "sent" | "error";
+type Field = "name" | "phone" | "email" | "company" | "postcode" | "message";
+type Errors = Partial<Record<Field, string>>;
 
-const field =
-  "mt-2 w-full rounded border border-line bg-white px-4 py-3 text-sm text-foreground placeholder:text-muted/60 focus:border-navy focus:outline-none";
-const label =
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const PHONE_RE = /^[0-9+()\-.\s]{6,40}$/;
+const POSTCODE_RE = /^[0-9]{4}$/;
+
+/** Mirrors the server's rules so people get told before a round trip. */
+function validate(values: Record<Field, string>): Errors {
+  const e: Errors = {};
+  if (!values.name) e.name = "Please tell us your name.";
+  if (!values.phone) e.phone = "Please give us a contact number.";
+  else if (!PHONE_RE.test(values.phone))
+    e.phone = "That doesn't look like a phone number.";
+  if (!values.email) e.email = "Please give us an email address.";
+  else if (!EMAIL_RE.test(values.email))
+    e.email = "That doesn't look like an email address.";
+  if (values.postcode && !POSTCODE_RE.test(values.postcode))
+    e.postcode = "Australian postcodes are 4 digits.";
+  if (!values.message) e.message = "Please tell us about your project.";
+  return e;
+}
+
+const fieldBase =
+  "mt-2 w-full rounded border bg-white px-4 py-3 text-sm text-foreground transition-colors placeholder:text-muted/60 focus:outline-none";
+const labelBase =
   "block text-xs font-semibold uppercase tracking-[0.16em] text-navy";
+
+/**
+ * Named FieldError rather than Error: a local `Error` would shadow the global
+ * constructor used in the submit handler. Defined at module scope so it is not
+ * recreated on every render.
+ */
+function FieldError({ id, message }: { id: Field; message?: string }) {
+  if (!message) return null;
+  return (
+    <p id={`${id}-error`} className="mt-2 text-xs text-red-700">
+      {message}
+    </p>
+  );
+}
 
 export default function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState<Errors>({});
+  const [formError, setFormError] = useState("");
+  const formRef = useRef<HTMLFormElement>(null);
+  const successRef = useRef<HTMLDivElement>(null);
+
+  function fieldProps(name: Field) {
+    const invalid = Boolean(errors[name]);
+    return {
+      id: name,
+      name,
+      "aria-invalid": invalid || undefined,
+      "aria-describedby": invalid ? `${name}-error` : undefined,
+      className: `${fieldBase} ${
+        invalid ? "border-red-600 focus:border-red-700" : "border-line focus:border-navy"
+      }`,
+    };
+  }
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = event.currentTarget;
-    const data = Object.fromEntries(new FormData(form).entries());
+    const data = Object.fromEntries(
+      new FormData(form).entries()
+    ) as unknown as Record<Field, string> & { website?: string };
+
+    const values: Record<Field, string> = {
+      name: (data.name ?? "").trim(),
+      phone: (data.phone ?? "").trim(),
+      email: (data.email ?? "").trim(),
+      company: (data.company ?? "").trim(),
+      postcode: (data.postcode ?? "").trim(),
+      message: (data.message ?? "").trim(),
+    };
+
+    const found = validate(values);
+    setErrors(found);
+    if (Object.keys(found).length > 0) {
+      setFormError("");
+      setStatus("idle");
+      // Send focus to the first problem so keyboard and screen-reader users
+      // land on it rather than hunting down the form.
+      const first = Object.keys(found)[0];
+      form.querySelector<HTMLElement>(`[name="${first}"]`)?.focus();
+      return;
+    }
 
     setStatus("sending");
-    setError("");
+    setFormError("");
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...values, website: data.website ?? "" }),
       });
       const json = (await res.json()) as { ok?: boolean; error?: string };
-      if (!res.ok || !json.ok)
-        throw new Error(json.error || "Something went wrong.");
+      if (!res.ok || !json.ok) throw new Error(json.error || "Something went wrong.");
       form.reset();
       setStatus("sent");
+      // Move focus to the confirmation so it's announced.
+      window.setTimeout(() => successRef.current?.focus(), 50);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong.");
+      setFormError(
+        err instanceof Error ? err.message : "Something went wrong."
+      );
       setStatus("error");
     }
   }
 
   if (status === "sent") {
     return (
-      <div className="rounded border border-line bg-sky-soft p-8">
+      <div
+        ref={successRef}
+        tabIndex={-1}
+        role="status"
+        aria-live="polite"
+        className="rounded border border-line bg-sky-soft p-8 focus:outline-none"
+      >
         <h3 className="text-xl">Thanks — we&apos;ve got your enquiry.</h3>
         <p className="mt-3 text-sm text-muted">
           A member of the Capital Hoardings team will be in touch shortly to
@@ -47,7 +131,10 @@ export default function ContactForm() {
         </p>
         <button
           type="button"
-          onClick={() => setStatus("idle")}
+          onClick={() => {
+            setStatus("idle");
+            setErrors({});
+          }}
           className="mt-6 text-sm font-semibold uppercase tracking-wider text-navy underline underline-offset-4"
         >
           Send another enquiry
@@ -57,7 +144,13 @@ export default function ContactForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} noValidate className="grid gap-5 sm:grid-cols-2">
+    <form
+      ref={formRef}
+      onSubmit={onSubmit}
+      noValidate
+      aria-busy={status === "sending"}
+      className="grid gap-5 sm:grid-cols-2"
+    >
       {/* Honeypot — hidden from people, filled by bots. Not the "company" field,
           which is a genuine question on this form. */}
       <div className="hidden" aria-hidden>
@@ -66,106 +159,107 @@ export default function ContactForm() {
       </div>
 
       <div>
-        <label className={label} htmlFor="name">
+        <label className={labelBase} htmlFor="name">
           Name <span className="text-sky">*</span>
         </label>
         <input
-          id="name"
-          name="name"
-          required
+          {...fieldProps("name")}
           maxLength={120}
           autoComplete="name"
-          className={field}
           placeholder="Your name"
         />
+        <FieldError id="name" message={errors.name} />
       </div>
 
       <div>
-        <label className={label} htmlFor="phone">
+        <label className={labelBase} htmlFor="phone">
           Number <span className="text-sky">*</span>
         </label>
         <input
-          id="phone"
-          name="phone"
+          {...fieldProps("phone")}
           type="tel"
-          required
           maxLength={40}
           autoComplete="tel"
-          className={field}
           placeholder="Best contact number"
         />
+        <FieldError id="phone" message={errors.phone} />
       </div>
 
       <div>
-        <label className={label} htmlFor="email">
+        <label className={labelBase} htmlFor="email">
           Email address <span className="text-sky">*</span>
         </label>
         <input
-          id="email"
-          name="email"
+          {...fieldProps("email")}
           type="email"
-          required
           maxLength={160}
           autoComplete="email"
-          className={field}
           placeholder="you@company.com.au"
         />
+        <FieldError id="email" message={errors.email} />
       </div>
 
       <div>
-        <label className={label} htmlFor="company">
+        <label className={labelBase} htmlFor="company">
           Company
         </label>
         <input
-          id="company"
-          name="company"
+          {...fieldProps("company")}
           maxLength={160}
           autoComplete="organization"
-          className={field}
           placeholder="Company name"
         />
+        <FieldError id="company" message={errors.company} />
       </div>
 
       <div className="sm:col-span-2">
-        <label className={label} htmlFor="postcode">
+        <label className={labelBase} htmlFor="postcode">
           Job location (postcode)
         </label>
         <input
-          id="postcode"
-          name="postcode"
-          maxLength={20}
+          {...fieldProps("postcode")}
+          maxLength={4}
           inputMode="numeric"
-          className={field}
+          autoComplete="postal-code"
           placeholder="e.g. 2600"
         />
+        <FieldError id="postcode" message={errors.postcode} />
       </div>
 
       <div className="sm:col-span-2">
-        <label className={label} htmlFor="message">
+        <label className={labelBase} htmlFor="message">
           Message <span className="text-sky">*</span>
         </label>
         <textarea
-          id="message"
-          name="message"
-          required
+          {...fieldProps("message")}
           rows={6}
           maxLength={5000}
-          className={field}
           placeholder="Tell us about your site, the hoarding you need and your timeframes."
         />
+        <FieldError id="message" message={errors.message} />
       </div>
 
-      {status === "error" && (
-        <p role="alert" className="sm:col-span-2 text-sm text-red-700">
-          {error}
+      {formError && (
+        <p
+          role="alert"
+          className="rounded border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 sm:col-span-2"
+        >
+          {formError} You can also email us at{" "}
+          <a
+            href="mailto:office@capitalhoardings.com.au"
+            className="underline underline-offset-2"
+          >
+            office@capitalhoardings.com.au
+          </a>
+          .
         </p>
       )}
 
-      <div className="sm:col-span-2 flex flex-wrap items-center gap-5">
+      <div className="flex flex-wrap items-center gap-5 sm:col-span-2">
         <button
           type="submit"
           disabled={status === "sending"}
-          className="rounded bg-navy px-8 py-3.5 text-sm font-semibold uppercase tracking-wider text-white transition-colors hover:bg-navy-deep disabled:opacity-60"
+          className="btn-shine rounded bg-navy px-8 py-3.5 text-sm font-semibold uppercase tracking-wider text-white transition-colors hover:bg-navy-deep disabled:cursor-not-allowed disabled:opacity-60"
         >
           {status === "sending" ? "Sending…" : "Send enquiry"}
         </button>

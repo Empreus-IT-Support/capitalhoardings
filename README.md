@@ -138,14 +138,65 @@ point the `src` at a new one.
    quote its specifications from the brief. Worth confirming the supplier is
    happy with the wording and can provide product imagery.
 
+## SEO
+
+- Per-page `title`, `description`, canonical and Open Graph/Twitter metadata via
+  `pageMeta()` in `lib/seo.tsx`. Declaring `openGraph` on a child page replaces
+  the parent block wholesale, so the share image is re-declared there — without
+  that, only the home page got one.
+- **Share image** is drawn at `app/opengraph-image.tsx` with `next/og` — brand
+  colours and the hoarding motif, no asset to maintain. 1200x630.
+- **Structured data** (`lib/seo.tsx`): `GeneralContractor` + `WebSite` sitewide,
+  `BreadcrumbList` per page, `Service` entries for the three offerings, and a
+  `Product` block for the TITAN system. All cross-referenced by `@id`.
+- `sitemap.xml` and `robots.txt` are generated (`app/sitemap.ts`, `app/robots.ts`).
+- One `<h1>` per page; `/api/*` is `noindex`.
+
+Add the phone number and street address to `lib/site.ts` **and** `organisationLd`
+together when the client confirms them — both feed local search results.
+
+## Hardening
+
+Security headers are set in `next.config.ts` and apply to every response:
+CSP, `X-Content-Type-Options`, `X-Frame-Options: DENY`, `Referrer-Policy`,
+`Permissions-Policy`, `Cross-Origin-Opener-Policy`, and HSTS in production.
+`poweredByHeader` is off so the framework isn't advertised.
+
+The CSP allows `'unsafe-inline' ` for scripts because Next inlines its own
+bootstrap and the JSON-LD blocks are inline `<script>`. Tightening that means
+nonce-based CSP via a `proxy.ts` (Next 16 renamed middleware) — worth doing if
+this site ever renders user-supplied content. It doesn't today, so the value
+here is in the other directives: nothing can frame the site, inject a `<base>`,
+load a plugin, or post a form off-site.
+
+`POST /api/contact` rejects:
+
+| Case | Response |
+| --- | --- |
+| `GET` (or any non-POST) | 405 |
+| content type that isn't JSON | 415 |
+| body over 32 KB | 413 |
+| missing/invalid name, phone, email, message, postcode | 400 |
+| more than 5 requests per IP per 10 minutes | 429 |
+| honeypot filled | 200, silently dropped |
+
+Enquiries are never cached (`no-store`), newlines are stripped from fields that
+reach mail headers, and personal details are only logged in development.
+
 ## Contact form
 
 `POST /api/contact` → Resend. Fields match the brief exactly: name, number,
 email address, company, job location (postcode), message.
 
-Protection: required-field and email validation, a hidden honeypot (`website` —
-note `company` is a real field here), and a per-IP rate limit of 5 requests per
-10 minutes.
+Validation runs on both sides with the same rules — the client shows per-field
+messages, sets `aria-invalid`/`aria-describedby`, and moves focus to the first
+problem; the server re-checks everything and never trusts the client. On success
+focus moves to the confirmation, which is a `role="status"` live region. On
+failure the error names the problem and offers the email address as a fallback.
+
+Protection: honeypot (`website` — note `company` is a real field here), per-IP
+rate limiting, body-size and content-type checks, and optional Cloudflare
+Turnstile that only activates once `TURNSTILE_SECRET_KEY` is set.
 
 Without `RESEND_API_KEY` the form still succeeds and logs the submission to the
 server console, so it is testable before mail is configured. Copy `.env.example`

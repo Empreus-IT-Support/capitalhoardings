@@ -6,18 +6,23 @@ import PageHero from "@/components/PageHero";
 import Photo from "@/components/Photo";
 import Reveal from "@/components/Reveal";
 import { IconArrow } from "@/components/Icons";
+import { JsonLd, breadcrumbs, pageMeta, servicesLd } from "@/lib/seo";
 import { services } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: "Services",
   description:
     "Internal, external and branded hoarding for construction sites, commercial developments and fit-outs across the ACT and Southern NSW.",
-  alternates: { canonical: "/services" },
-};
+  path: "/services",
+});
 
 export default function ServicesPage() {
   return (
     <>
+      <JsonLd
+        data={[servicesLd, breadcrumbs([{ name: "Services", path: "/services" }])]}
+      />
+
       <PageHero
         eyebrow="Services"
         title="Internal, external and branded hoarding"

@@ -6,14 +6,15 @@ import CharReveal from "@/components/CharReveal";
 import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
 import * as Icons from "@/components/Icons";
+import { JsonLd, breadcrumbs, pageMeta, systemLd } from "@/lib/seo";
 import { applications } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: "The TITAN Hoarding System",
   description:
     "Capital Hoardings utilises the TITAN Hoarding System — an Australian-made, modular, freestanding hoarding system engineer-certified and designed to comply with AS 4687.",
-  alternates: { canonical: "/system" },
-};
+  path: "/system",
+});
 
 const keyFeatures = [
   {
@@ -58,6 +59,10 @@ const specs = [
 export default function SystemPage() {
   return (
     <>
+      <JsonLd
+        data={[systemLd, breadcrumbs([{ name: "The TITAN System", path: "/system" }])]}
+      />
+
       <PageHero
         eyebrow="Our system"
         title="Advanced hoarding. Engineered for Australian conditions."

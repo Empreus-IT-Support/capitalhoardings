@@ -11,6 +11,7 @@ import StatBand from "@/components/StatBand";
 import WordReveal from "@/components/WordReveal";
 import * as Icons from "@/components/Icons";
 import { IconArrow } from "@/components/Icons";
+import { JsonLd, servicesLd } from "@/lib/seo";
 import { services, site, whyUs } from "@/lib/site";
 
 const heroCredentials = [
@@ -29,6 +30,8 @@ const titanPoints = [
 export default function Home() {
   return (
     <>
+      <JsonLd data={servicesLd} />
+
       {/* ---------------- Hero ---------------- */}
       <section className="relative isolate flex min-h-[88vh] items-end overflow-hidden bg-navy-ink">
         <Image
