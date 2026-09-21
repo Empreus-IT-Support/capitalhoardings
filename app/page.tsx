@@ -1,69 +1,154 @@
-import Image from "next/image";
+import Link from "next/link";
+import CtaBand from "@/components/CtaBand";
+import PhotoSlot from "@/components/PhotoSlot";
+import Reveal from "@/components/Reveal";
+import SectionHeading from "@/components/SectionHeading";
+import { services, site, whyUs } from "@/lib/site";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <>
+      {/* ---------------- Hero ---------------- */}
+      <section className="relative overflow-hidden bg-navy-ink">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-[0.14]"
+          style={{
+            backgroundImage:
+              "repeating-linear-gradient(-45deg, #62B6E4 0 3px, transparent 3px 26px)",
+          }}
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+        <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-6 py-20 lg:grid-cols-[1.1fr_0.9fr] lg:py-28">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-sky">
+              Specialist hoarding — {site.region}
+            </p>
+            <h1 className="mt-5 text-5xl text-white sm:text-6xl lg:text-7xl">
+              Building protection.
+              <br />
+              <span className="text-sky">Delivering confidence.</span>
+            </h1>
+            <p className="mt-7 max-w-xl text-lg leading-relaxed text-white/75">
+              Capital Hoardings provides practical, professional and reliable hoarding
+              solutions for construction sites, commercial developments and projects of
+              all sizes across the ACT and Southern NSW.
+            </p>
+            <div className="mt-10 flex flex-wrap gap-4">
+              <Link
+                href="/contact"
+                className="rounded bg-sky px-8 py-3.5 text-sm font-semibold uppercase tracking-wider text-navy-ink transition-colors hover:bg-white"
+              >
+                Request a quote
+              </Link>
+              <Link
+                href="/system"
+                className="rounded border border-white/30 px-8 py-3.5 text-sm font-semibold uppercase tracking-wider text-white transition-colors hover:border-white hover:bg-white/10"
+              >
+                The TITAN system
+              </Link>
+            </div>
+          </div>
+
+          <PhotoSlot
+            label="Hero image — installed hoarding on site (to be provided)"
+            className="min-h-[320px] border-white/15 bg-white/5 lg:min-h-[420px]"
+          />
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      {/* ---------------- Services ---------------- */}
+      <section className="mx-auto max-w-7xl px-6 py-20 sm:py-24">
+        <SectionHeading
+          eyebrow="What we do"
+          title="Hoarding solutions built around your site"
+          intro="From standard construction hoarding through to branded installations, we deliver the right solution for the job — installed properly, on time and to a high standard."
+        />
+        <div className="mt-12 grid gap-6 md:grid-cols-3">
+          {services.map((service, i) => (
+            <Reveal key={service.slug} delay={i * 90}>
+              <Link
+                href={`/services#${service.slug}`}
+                className="group flex h-full flex-col rounded border border-line bg-white transition-shadow hover:shadow-[0_12px_32px_rgba(7,31,58,0.1)]"
+              >
+                <PhotoSlot
+                  label={`${service.title} photo`}
+                  className="min-h-[180px] rounded-none rounded-t border-0 border-b"
+                />
+                <div className="flex flex-1 flex-col p-7">
+                  <h3 className="text-2xl">{service.title}</h3>
+                  <p className="mt-3 flex-1 text-sm leading-relaxed text-muted">
+                    {service.summary}
+                  </p>
+                  <span className="mt-6 text-xs font-semibold uppercase tracking-[0.18em] text-navy group-hover:text-sky">
+                    Learn more →
+                  </span>
+                </div>
+              </Link>
+            </Reveal>
+          ))}
         </div>
-      </main>
-    </div>
+      </section>
+
+      {/* ---------------- Why us ---------------- */}
+      <section className="bg-panel">
+        <div className="mx-auto max-w-7xl px-6 py-20 sm:py-24">
+          <SectionHeading
+            eyebrow="Why Capital Hoardings?"
+            title="A responsive local team you can rely on"
+            intro="We work closely with builders, developers, contractors and project managers to deliver hoarding that suits each site — and keeps the project moving."
+          />
+          <div className="mt-12 grid gap-px overflow-hidden rounded border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
+            {whyUs.map((item, i) => (
+              <Reveal key={item.title} delay={i * 60} className="bg-white">
+                <div className="h-full p-8">
+                  <span className="font-display text-sm font-bold text-sky">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <h3 className="mt-3 text-xl">{item.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted">{item.body}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ---------------- TITAN teaser ---------------- */}
+      <section className="mx-auto grid max-w-7xl items-center gap-12 px-6 py-20 sm:py-24 lg:grid-cols-2">
+        <PhotoSlot
+          label="TITAN hoarding installation photo (to be provided)"
+          className="min-h-[340px]"
+        />
+        <div>
+          <SectionHeading
+            eyebrow="Our system"
+            title="Advanced hoarding. Engineered for Australian conditions."
+            intro="We utilise the TITAN Hoarding System — an Australian-made, modular, freestanding hoarding system designed to provide effective site separation and protection without the need for traditional ground penetration or ceiling fixings."
+          />
+          <ul className="mt-8 space-y-3">
+            {[
+              "Freestanding — no ground penetration or ceiling fixings",
+              "Modular panels configured to any site layout",
+              "Engineer-certified, designed to comply with AS 4687",
+              "Fire-retardant panel options available",
+              "An ideal surface for project branding and graphics",
+            ].map((point) => (
+              <li key={point} className="flex gap-3 text-sm text-muted">
+                <span className="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-sky" />
+                {point}
+              </li>
+            ))}
+          </ul>
+          <Link
+            href="/system"
+            className="mt-9 inline-block rounded bg-navy px-8 py-3.5 text-sm font-semibold uppercase tracking-wider text-white transition-colors hover:bg-navy-deep"
+          >
+            Explore the TITAN system
+          </Link>
+        </div>
+      </section>
+
+      <CtaBand />
+    </>
   );
 }

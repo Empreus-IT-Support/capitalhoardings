@@ -1,36 +1,91 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Capital Hoardings
 
-## Getting Started
+Website for Capital Hoardings — specialist hoarding construction for the ACT and
+Southern NSW. Target domain: **www.capitalhoardings.com.au**.
 
-First, run the development server:
+Next.js 16 (App Router) · TypeScript · Tailwind v4 · Resend for the contact form.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev     # http://localhost:3000
+npm run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Where the content came from
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Every word of copy is taken from the client's brief deck
+(`Capital Hoardings - Website .pptx`). The deck's five sections map to five routes:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Deck slide | Route |
+| --- | --- |
+| 1 — Why Capital Hoardings / Get Your Project Secured | `/` |
+| 2–3 — About | `/about` |
+| 4 — Services (Internal / External / Branded) | `/services` |
+| 5–7 — TITAN Hoarding System | `/system` |
+| 8 — Contact + form | `/contact` |
 
-## Learn More
+Copy lives in `lib/site.ts` where it is reused across pages; longer prose sits in
+the page files.
 
-To learn more about Next.js, take a look at the following resources:
+## Brand
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Colours are sampled from the supplied logo artwork and defined once in
+`app/globals.css`:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Token | Hex | Use |
+| --- | --- | --- |
+| `navy` | `#11427A` | primary — buttons, headings, nav |
+| `navy-ink` | `#071F3A` | dark sections, footer, hero |
+| `sky` | `#62B6E4` | accent — eyebrows, links, CTA |
+| `sky-soft` | `#E8F3FB` | tints |
 
-## Deploy on Vercel
+Logo files in `public/images/` are derived from the client's JPEG with the white
+ground knocked out, so they sit cleanly on both white and navy. If the client can
+supply vector artwork (`.ai`, `.eps` or `.svg`), swap it in — it will render
+sharper at large sizes.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Outstanding — needs the client
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+These are the gaps in the brief, all marked in the deck as "to be provided":
+
+1. **Photography.** Every image position renders a `<PhotoSlot>` placeholder
+   describing the shot required. Replace each with `next/image` once photos land.
+2. **Phone number.** The deck says "P: TBC". `lib/site.ts` has `phone: null`,
+   which hides phone links site-wide and shows "TBC". Set `phone` and
+   `phoneDisplay` when confirmed.
+3. **Physical address / ABN** — not supplied; add to the footer and the JSON-LD
+   in `app/layout.tsx` when available (helps local SEO).
+4. **TITAN brand approval.** The system pages name the TITAN Hoarding System and
+   quote its specifications from the brief. Worth confirming the supplier is
+   happy with the wording and can provide product imagery.
+
+## Contact form
+
+`POST /api/contact` → Resend. Fields match the brief exactly: name, number,
+email address, company, job location (postcode), message.
+
+Protection: required-field and email validation, a hidden honeypot (`website` —
+note `company` is a real field here), and a per-IP rate limit of 5 requests per
+10 minutes.
+
+Without `RESEND_API_KEY` the form still succeeds and logs the submission to the
+server console, so it is testable before mail is configured. Copy `.env.example`
+to `.env.local` and fill in:
+
+| Variable | Purpose |
+| --- | --- |
+| `RESEND_API_KEY` | Resend API key |
+| `CONTACT_FROM` | verified sender on capitalhoardings.com.au |
+| `CONTACT_TO` | where enquiries go (defaults to `office@capitalhoardings.com.au`) |
+
+## Email addresses
+
+The client asked for `accounts@capitalhoardings.com.au` and
+`office@capitalhoardings.com.au`. Those are mailbox/DNS jobs, not site code —
+both are already referenced in the footer and on `/contact`.
+
+## Deployment
+
+Vercel, same as the other builds. Add the env vars above, attach
+`capitalhoardings.com.au` plus the `www` variant, and verify the domain in Resend
+so the form sends from the client's own domain.
