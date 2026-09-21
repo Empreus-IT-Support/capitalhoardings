@@ -10,10 +10,10 @@ const items = [
 ];
 
 /** Capability strip. Duplicated once so the -50% translate loops seamlessly. */
-export default function Marquee() {
+export default function Marquee({ reverse = false }: { reverse?: boolean }) {
   return (
     <div className="marquee overflow-hidden border-y border-line bg-white py-5">
-      <div className="marquee-track">
+      <div className={reverse ? "marquee-track-reverse" : "marquee-track"}>
         {[0, 1].map((pass) => (
           <div key={pass} className="flex shrink-0" aria-hidden={pass === 1}>
             {items.map((item) => (

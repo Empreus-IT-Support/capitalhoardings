@@ -13,8 +13,14 @@ export const metadata: Metadata = {
 };
 
 const reassurance = [
-  { icon: IconLocation, text: "A local team, servicing the ACT and Southern NSW" },
-  { icon: IconPanel, text: "Hoarding specified around your site, not off a shelf" },
+  {
+    icon: IconLocation,
+    text: "A local team, servicing the ACT and Southern NSW",
+  },
+  {
+    icon: IconPanel,
+    text: "Hoarding specified around your site, not off a shelf",
+  },
   { icon: IconShield, text: "Engineer-certified, safety-first installation" },
 ];
 
@@ -79,8 +85,11 @@ export default function ContactPage() {
 
           <ul className="mt-10 space-y-4">
             {reassurance.map((item) => (
-              <li key={item.text} className="flex items-start gap-4 text-sm text-muted">
-                <item.icon className="mt-0.5 h-6 w-6 shrink-0 text-sky" />
+              <li
+                key={item.text}
+                className="group flex items-start gap-4 text-sm text-muted"
+              >
+                <item.icon className="mt-0.5 h-6 w-6 shrink-0 text-sky transition-transform duration-500 group-hover:-translate-y-0.5 group-hover:rotate-6" />
                 {item.text}
               </li>
             ))}
@@ -90,7 +99,7 @@ export default function ContactPage() {
             src="/images/project-01.jpg"
             alt="Hoarded construction site frontage"
             note="Replace with a Capital Hoardings project photo"
-            className="mt-10 h-56"
+            className="panel-card mt-10 h-56"
             sizes="(max-width: 1024px) 100vw, 35vw"
           />
         </div>
@@ -99,7 +108,8 @@ export default function ContactPage() {
           <p className="eyebrow text-navy/55">Enquiry</p>
           <h2 className="mt-3 text-3xl">Send us the details</h2>
           <p className="mt-3 text-sm text-muted">
-            Fill in the form below and a member of our team will get back to you.
+            Fill in the form below and a member of our team will get back to
+            you.
           </p>
           <div className="mt-9">
             <ContactForm />

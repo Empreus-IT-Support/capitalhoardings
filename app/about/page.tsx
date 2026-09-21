@@ -17,8 +17,14 @@ export const metadata: Metadata = {
 
 const gallery = [
   { src: "/images/project-01.jpg", alt: "Secured construction site boundary" },
-  { src: "/images/project-02.jpg", alt: "Hoarding and scaffolding on a commercial build" },
-  { src: "/images/project-03.jpg", alt: "Site crew walking a hoarded street frontage" },
+  {
+    src: "/images/project-02.jpg",
+    alt: "Hoarding and scaffolding on a commercial build",
+  },
+  {
+    src: "/images/project-03.jpg",
+    alt: "Site crew walking a hoarded street frontage",
+  },
 ];
 
 export default function AboutPage() {
@@ -35,27 +41,24 @@ export default function AboutPage() {
       {/* Intro — text beside a tall portrait image */}
       <section className="mx-auto grid max-w-7xl gap-14 px-6 py-20 sm:py-28 lg:grid-cols-[1.15fr_0.85fr]">
         <div>
-          <SectionHeading
-            eyebrow="Who we are"
-            title="Hoarding is all we do"
-          />
+          <SectionHeading eyebrow="Who we are" title="Hoarding is all we do" />
           <div className="mt-8 space-y-5 text-base leading-relaxed text-muted sm:text-lg">
             <p>
-              Capital Hoardings is a specialist hoarding construction company servicing
-              the ACT and Southern NSW. We provide practical, professional and reliable
-              hoarding solutions for construction sites, commercial developments and
-              projects of all sizes.
+              Capital Hoardings is a specialist hoarding construction company
+              servicing the ACT and Southern NSW. We provide practical,
+              professional and reliable hoarding solutions for construction
+              sites, commercial developments and projects of all sizes.
             </p>
             <p>
-              We understand that effective site hoarding is an essential part of any
-              construction project. It helps protect workers and the public, improves
-              site security, manages pedestrian and site access, and keeps your project
-              looking professional from day one.
+              We understand that effective site hoarding is an essential part of
+              any construction project. It helps protect workers and the public,
+              improves site security, manages pedestrian and site access, and
+              keeps your project looking professional from day one.
             </p>
             <p>
-              Our experienced team works closely with builders, developers, contractors
-              and project managers to deliver hoarding solutions that are tailored to the
-              requirements of each site.
+              Our experienced team works closely with builders, developers,
+              contractors and project managers to deliver hoarding solutions
+              that are tailored to the requirements of each site.
             </p>
           </div>
         </div>
@@ -63,7 +66,7 @@ export default function AboutPage() {
           src="/images/about-team.jpg"
           alt="Capital Hoardings crew on site in high-visibility gear"
           note="Replace with a photo of the Capital Hoardings team"
-          className="h-[24rem] lg:h-full lg:min-h-[30rem]"
+          className="panel-card h-[24rem] lg:h-full lg:min-h-[30rem]"
           sizes="(max-width: 1024px) 100vw, 40vw"
         />
       </section>
@@ -77,27 +80,31 @@ export default function AboutPage() {
             src="/images/about-install.jpg"
             alt="Hoarding being installed on an active construction site"
             note="Replace with an installation-in-progress photo"
-            className="order-2 h-[24rem] lg:order-1 lg:h-[30rem]"
+            className="panel-card order-2 h-[24rem] lg:order-1 lg:h-[30rem]"
             sizes="(max-width: 1024px) 100vw, 45vw"
           />
           <div className="order-1 lg:order-2">
-            <SectionHeading eyebrow="Our approach" title="Built for your site" />
+            <SectionHeading
+              eyebrow="Our approach"
+              title="Built for your site"
+            />
             <div className="mt-8 space-y-5 text-base leading-relaxed text-muted sm:text-lg">
               <p>
-                No two construction sites are the same. That&apos;s why we take a
-                practical, project-focused approach to every job.
+                No two construction sites are the same. That&apos;s why we take
+                a practical, project-focused approach to every job.
               </p>
               <p>
-                From site setup and installation through to removal, we deliver solutions
-                designed around your site conditions, access requirements, project
-                timelines and safety considerations. We pride ourselves on quality
-                workmanship, attention to detail and getting the job done efficiently and
-                professionally.
+                From site setup and installation through to removal, we deliver
+                solutions designed around your site conditions, access
+                requirements, project timelines and safety considerations. We
+                pride ourselves on quality workmanship, attention to detail and
+                getting the job done efficiently and professionally.
               </p>
               <p>
-                Whether you need standard construction hoarding, pedestrian protection,
-                site screening, branded hoarding or a complete hoarding installation,
-                Capital Hoardings has the experience and capability to deliver.
+                Whether you need standard construction hoarding, pedestrian
+                protection, site screening, branded hoarding or a complete
+                hoarding installation, Capital Hoardings has the experience and
+                capability to deliver.
               </p>
             </div>
           </div>
@@ -109,28 +116,42 @@ export default function AboutPage() {
       {/* Quality + local, as contrasting panels */}
       <section className="mx-auto max-w-7xl px-6 pb-20 sm:pb-28">
         <div className="grid gap-px bg-line md:grid-cols-2">
-          <Reveal className="bg-white">
+          <Reveal direction="right" distance={30} className="bg-white">
             <article className="h-full p-10 sm:p-12">
               <p className="eyebrow text-navy/55">Standards</p>
-              <h2 className="mt-4 text-3xl sm:text-4xl">Quality you can rely on</h2>
+              <h2 className="mt-4 text-3xl sm:text-4xl">
+                Quality you can rely on
+              </h2>
               <div className="mt-6 space-y-4 text-sm leading-relaxed text-muted sm:text-base">
-                <p>At Capital Hoardings, we believe in doing the job properly.</p>
                 <p>
-                  We use quality materials, proven installation methods and a safety-first
-                  approach to ensure every project is delivered to a high standard. We
-                  communicate clearly, work efficiently and aim to make the hoarding
-                  process as straightforward as possible for our clients.
+                  At Capital Hoardings, we believe in doing the job properly.
                 </p>
                 <p>
-                  From smaller construction sites to major developments, our focus remains
-                  the same: safe sites, quality installations and reliable service.
+                  We use quality materials, proven installation methods and a
+                  safety-first approach to ensure every project is delivered to
+                  a high standard. We communicate clearly, work efficiently and
+                  aim to make the hoarding process as straightforward as
+                  possible for our clients.
+                </p>
+                <p>
+                  From smaller construction sites to major developments, our
+                  focus remains the same: safe sites, quality installations and
+                  reliable service.
                 </p>
               </div>
             </article>
           </Reveal>
 
-          <Reveal delay={120} className="relative overflow-hidden bg-navy">
-            <div className="hazard-wash absolute inset-0" aria-hidden />
+          <Reveal
+            delay={120}
+            direction="left"
+            distance={30}
+            className="relative overflow-hidden bg-navy"
+          >
+            <div
+              className="hazard-wash hazard-wash-drift absolute inset-0"
+              aria-hidden
+            />
             <article className="relative h-full p-10 text-white/80 sm:p-12">
               <p className="eyebrow text-sky">Local</p>
               <h2 className="mt-4 text-3xl text-white sm:text-4xl">
@@ -138,14 +159,14 @@ export default function AboutPage() {
               </h2>
               <div className="mt-6 space-y-4 text-sm leading-relaxed sm:text-base">
                 <p>
-                  Based in the region and focused on local projects, Capital Hoardings
-                  understands the requirements of construction sites across the ACT and
-                  Southern NSW.
+                  Based in the region and focused on local projects, Capital
+                  Hoardings understands the requirements of construction sites
+                  across the ACT and Southern NSW.
                 </p>
                 <p>
-                  When you choose Capital Hoardings, you can expect a responsive local
-                  team committed to delivering a quality result — on time and with minimal
-                  disruption to your project.
+                  When you choose Capital Hoardings, you can expect a responsive
+                  local team committed to delivering a quality result — on time
+                  and with minimal disruption to your project.
                 </p>
               </div>
             </article>
@@ -154,7 +175,7 @@ export default function AboutPage() {
 
         <div className="mt-6 grid gap-6 sm:grid-cols-3">
           {gallery.map((shot, i) => (
-            <Reveal key={shot.src} delay={i * 90}>
+            <Reveal key={shot.src} delay={i * 110} direction="scale">
               <Photo
                 src={shot.src}
                 alt={shot.alt}

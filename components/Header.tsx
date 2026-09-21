@@ -28,7 +28,10 @@ export default function Header() {
           <span className="flex items-center gap-2">
             <span className="text-sky">Phone</span>
             {site.phone ? (
-              <a href={`tel:${site.phone.replace(/\s/g, "")}`} className="hover:text-sky">
+              <a
+                href={`tel:${site.phone.replace(/\s/g, "")}`}
+                className="hover:text-sky"
+              >
                 {site.phoneDisplay}
               </a>
             ) : (
@@ -49,7 +52,11 @@ export default function Header() {
           scrolled ? "shadow-[0_2px_16px_rgba(7,31,58,0.08)]" : ""
         }`}
       >
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-6 py-3">
+        <div
+          className={`mx-auto flex max-w-7xl items-center justify-between gap-6 px-6 transition-[padding] duration-500 ${
+            scrolled ? "py-1.5" : "py-3"
+          }`}
+        >
           <Logo />
 
           <nav className="hidden items-center gap-1 lg:flex" aria-label="Main">
@@ -61,7 +68,7 @@ export default function Header() {
                   key={item.href}
                   href={item.href}
                   aria-current={active ? "page" : undefined}
-                  className={`rounded px-4 py-2 text-sm font-semibold uppercase tracking-wider transition-colors ${
+                  className={`nav-underline rounded px-4 py-2 text-sm font-semibold uppercase tracking-wider transition-colors ${
                     active ? "text-navy" : "text-muted hover:text-navy"
                   }`}
                 >
@@ -71,7 +78,7 @@ export default function Header() {
             })}
             <Link
               href="/contact"
-              className="ml-3 rounded bg-navy px-5 py-2.5 text-sm font-semibold uppercase tracking-wider text-white transition-colors hover:bg-navy-deep"
+              className="btn-shine ml-3 bg-navy px-5 py-2.5 text-sm font-semibold uppercase tracking-wider text-white transition-colors hover:bg-navy-deep"
             >
               Get a quote
             </Link>
@@ -85,7 +92,13 @@ export default function Header() {
             className="flex h-11 w-11 items-center justify-center rounded border border-line text-navy lg:hidden"
           >
             <span className="sr-only">{open ? "Close menu" : "Open menu"}</span>
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden
+            >
               {open ? (
                 <path
                   d="M6 6l12 12M18 6L6 18"

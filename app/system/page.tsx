@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import CtaBand from "@/components/CtaBand";
 import PageHero from "@/components/PageHero";
 import Photo from "@/components/Photo";
+import CharReveal from "@/components/CharReveal";
 import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
 import * as Icons from "@/components/Icons";
@@ -68,13 +69,24 @@ export default function SystemPage() {
       {/* Spec strip */}
       <section className="border-b border-line bg-white">
         <dl className="mx-auto grid max-w-7xl gap-px bg-line px-6 sm:grid-cols-2 lg:grid-cols-4">
-          {specs.map((spec) => (
-            <div key={spec.label} className="bg-white px-6 py-8">
-              <dt className="eyebrow text-navy/55">{spec.label}</dt>
-              <dd className="mt-3 font-display text-3xl font-bold text-navy">
-                {spec.value}
-              </dd>
-            </div>
+          {specs.map((spec, i) => (
+            <Reveal
+              key={spec.label}
+              delay={i * 90}
+              direction="up"
+              distance={16}
+            >
+              <div className="group h-full bg-white px-6 py-8 transition-colors duration-500 hover:bg-sky-soft">
+                <dt className="eyebrow text-navy/55">{spec.label}</dt>
+                <dd className="mt-3 font-display text-3xl font-bold text-navy">
+                  <CharReveal text={spec.value} delay={i * 90 + 120} />
+                </dd>
+                <span
+                  aria-hidden
+                  className="mt-4 block h-[3px] w-8 bg-sky transition-all duration-500 group-hover:w-16"
+                />
+              </div>
+            </Reveal>
           ))}
         </dl>
       </section>
@@ -85,16 +97,16 @@ export default function SystemPage() {
           <SectionHeading eyebrow="Overview" title="A system, not a fence" />
           <div className="mt-8 space-y-5 text-base leading-relaxed text-muted sm:text-lg">
             <p>
-              Australian-made and engineered for demanding site conditions, TITAN is a
-              modular, freestanding hoarding system designed to provide effective site
-              separation and protection without the need for traditional ground
-              penetration or ceiling fixings.
+              Australian-made and engineered for demanding site conditions,
+              TITAN is a modular, freestanding hoarding system designed to
+              provide effective site separation and protection without the need
+              for traditional ground penetration or ceiling fixings.
             </p>
             <p>
-              Its versatile design allows hoarding to be configured to suit virtually any
-              site layout, while its robust construction provides the strength,
-              flexibility and professional finish required for modern construction
-              projects.
+              Its versatile design allows hoarding to be configured to suit
+              virtually any site layout, while its robust construction provides
+              the strength, flexibility and professional finish required for
+              modern construction projects.
             </p>
           </div>
         </div>
@@ -102,7 +114,7 @@ export default function SystemPage() {
           src="/images/system-panels.jpg"
           alt="Hoarding panels and site signage securing a work zone"
           note="Replace with a TITAN panel detail photo"
-          className="h-[24rem] lg:h-[30rem]"
+          className="panel-card h-[24rem] lg:h-[30rem]"
           sizes="(max-width: 1024px) 100vw, 48vw"
         />
       </section>
@@ -110,14 +122,22 @@ export default function SystemPage() {
       {/* Key features */}
       <section className="bg-panel">
         <div className="mx-auto max-w-7xl px-6 py-20 sm:py-28">
-          <SectionHeading eyebrow="Key features" title="What the TITAN system delivers" />
+          <SectionHeading
+            eyebrow="Key features"
+            title="What the TITAN system delivers"
+          />
           <div className="mt-14 grid gap-px bg-line md:grid-cols-2 lg:grid-cols-3">
             {keyFeatures.map((feature, i) => {
               const Icon = Icons[feature.icon as keyof typeof Icons];
               return (
-                <Reveal key={feature.title} delay={i * 70} className="bg-white">
-                  <div className="h-full p-9">
-                    <span className="flex h-12 w-12 items-center justify-center bg-navy text-sky">
+                <Reveal
+                  key={feature.title}
+                  delay={i * 80}
+                  direction="scale"
+                  className="bg-white"
+                >
+                  <div className="group h-full p-9 transition-colors duration-500 hover:bg-sky-soft">
+                    <span className="icon-tile flex h-12 w-12 items-center justify-center bg-navy text-sky">
                       <Icon className="h-6 w-6" />
                     </span>
                     <h3 className="mt-6 text-xl">{feature.title}</h3>
@@ -145,20 +165,30 @@ export default function SystemPage() {
               src="/images/service-branded.jpg"
               alt="Branded hoarding panels along a city street frontage"
               note="Replace with Capital Hoardings application photos"
-              className="mt-10 h-72"
+              className="panel-card mt-10 h-72"
               sizes="(max-width: 1024px) 100vw, 40vw"
             />
           </div>
           <ol className="grid gap-px self-start bg-line">
             {applications.map((app, i) => (
-              <Reveal key={app.title} delay={i * 60} className="bg-white">
-                <li className="flex flex-col gap-3 p-7 sm:flex-row sm:gap-8">
-                  <span className="font-display text-2xl font-bold text-sky sm:w-12 sm:shrink-0">
+              <Reveal
+                key={app.title}
+                delay={i * 70}
+                direction="right"
+                distance={22}
+                className="bg-white"
+              >
+                <li className="group flex flex-col gap-3 p-7 transition-colors duration-500 hover:bg-panel sm:flex-row sm:gap-8">
+                  <span className="font-display text-2xl font-bold text-sky transition-transform duration-500 group-hover:-translate-y-0.5 sm:w-12 sm:shrink-0">
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <div>
-                    <h3 className="text-xl">{app.title}</h3>
-                    <p className="mt-2 text-sm leading-relaxed text-muted">{app.body}</p>
+                    <h3 className="text-xl transition-transform duration-500 group-hover:translate-x-1">
+                      {app.title}
+                    </h3>
+                    <p className="mt-2 text-sm leading-relaxed text-muted">
+                      {app.body}
+                    </p>
                   </div>
                 </li>
               </Reveal>
@@ -169,7 +199,10 @@ export default function SystemPage() {
 
       {/* Safety */}
       <section className="relative overflow-hidden bg-navy-ink">
-        <div className="hazard-wash absolute inset-0" aria-hidden />
+        <div
+          className="hazard-wash hazard-wash-drift absolute inset-0"
+          aria-hidden
+        />
         <div className="relative mx-auto grid max-w-7xl gap-14 px-6 py-20 sm:py-28 lg:grid-cols-2">
           <div>
             <SectionHeading
@@ -180,23 +213,28 @@ export default function SystemPage() {
             <div className="mt-8 space-y-5 text-base leading-relaxed text-white/75 sm:text-lg">
               <p>
                 Safety is at the core of the TITAN system. The system is
-                engineer-certified and designed to comply with AS 4687 requirements,
-                providing a robust solution for temporary hoarding applications.
+                engineer-certified and designed to comply with AS 4687
+                requirements, providing a robust solution for temporary hoarding
+                applications.
               </p>
               <p>
-                External installations can be engineered to accommodate site-specific
-                wind loads, with additional bracing available where required. Panel
-                options incorporating fire-retardant cores can also provide enhanced fire
-                performance for appropriate applications.
+                External installations can be engineered to accommodate
+                site-specific wind loads, with additional bracing available
+                where required. Panel options incorporating fire-retardant cores
+                can also provide enhanced fire performance for appropriate
+                applications.
               </p>
             </div>
           </div>
 
           <div className="border border-white/15 bg-white/5 p-10">
-            <h3 className="text-2xl text-white">We&apos;ll spec it for your site</h3>
+            <h3 className="text-2xl text-white">
+              We&apos;ll spec it for your site
+            </h3>
             <p className="mt-4 text-sm leading-relaxed text-white/75">
-              Capital Hoardings can assess your project requirements and determine the
-              most suitable TITAN configuration, taking into consideration:
+              Capital Hoardings can assess your project requirements and
+              determine the most suitable TITAN configuration, taking into
+              consideration:
             </p>
             <ul className="mt-7 grid gap-px bg-white/15 sm:grid-cols-2">
               {[
@@ -211,7 +249,10 @@ export default function SystemPage() {
                   key={item}
                   className="flex items-center gap-3 bg-navy-ink px-4 py-4 text-sm text-white/85"
                 >
-                  <span className="h-1.5 w-1.5 shrink-0 rotate-45 bg-sky" aria-hidden />
+                  <span
+                    className="h-1.5 w-1.5 shrink-0 rotate-45 bg-sky"
+                    aria-hidden
+                  />
                   {item}
                 </li>
               ))}

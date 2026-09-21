@@ -3,6 +3,7 @@ import { Barlow_Condensed, Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ScrollProgress from "@/components/ScrollProgress";
 import { site } from "@/lib/site";
 
 const display = Barlow_Condensed({
@@ -88,6 +89,18 @@ export default function RootLayout({
       lang="en-AU"
       className={`${display.variable} ${inter.variable} h-full antialiased`}
     >
+      <head>
+        {/* Reveal components render hidden and animate in on scroll, so without
+            JS the page would come up blank. Force everything visible instead. */}
+        <noscript>
+          <style
+            dangerouslySetInnerHTML={{
+              __html:
+                ".reveal,.word-rise,.char-rise,.step-reveal{opacity:1!important;transform:none!important}.connector{transform:scaleX(1)!important}",
+            }}
+          />
+        </noscript>
+      </head>
       <body className="flex min-h-full flex-col">
         <script
           type="application/ld+json"
@@ -99,6 +112,7 @@ export default function RootLayout({
         >
           Skip to content
         </a>
+        <ScrollProgress />
         <Header />
         <main id="main" className="flex-1">
           {children}

@@ -50,6 +50,35 @@ the TITAN figures, and a five-step **Assess → Configure → Install → Adapt 
 Remove** process section. The brief describes that sequence in prose ("from site
 setup and installation through to removal") but never lays it out.
 
+## Motion
+
+Scroll and hover motion is deliberate but cheap — no animation library, just
+IntersectionObserver plus CSS transitions.
+
+| Piece | What it does |
+| --- | --- |
+| `Reveal` | fades content in on scroll, from any of five directions, with a stagger delay |
+| `WordReveal` | headlines fade in word by word |
+| `CharReveal` | stat and spec values assemble character by character |
+| `ScrollProgress` | sky rule across the top tracking page progress |
+| `Marquee` | capability strip, forwards or `reverse`, pauses on hover |
+| `Process` | connector rule draws across the row, then the steps arrive in sequence |
+| `ServiceCard` | image zoom, gradient deepen, sky rule extend, summary opens (grid-rows 0fr→1fr) |
+| CSS | `.btn-shine` sweep, `.nav-underline`, `.icon-tile` tilt, `.hazard-wash-drift`, `.diamond` pulse |
+
+Two rules worth keeping if you extend this:
+
+1. **Every reveal has a 1200ms fallback timer.** If IntersectionObserver never
+   fires the content would stay invisible for good — some embedded browsers and
+   headless renderers never report intersection. The timer guarantees it
+   appears. `<noscript>` styles cover the no-JS case as well.
+2. **Don't put `transform` or `will-change: transform` on layers stacked over the
+   heroes.** Promoting them to their own compositing layer makes them paint over
+   the copy on top. That is why `WordReveal` animates opacity only, and why
+   there is no hero parallax.
+
+Everything is disabled under `prefers-reduced-motion: reduce`.
+
 ## Brand
 
 Colours are sampled from the supplied logo artwork and defined once in

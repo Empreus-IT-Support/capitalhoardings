@@ -10,9 +10,10 @@ export default function Footer() {
         <div>
           <Logo variant="dark" />
           <p className="mt-6 max-w-sm text-sm leading-relaxed">
-            Specialist hoarding construction for the ACT and Southern NSW. Practical,
-            professional and reliable hoarding solutions for construction sites,
-            commercial developments and projects of all sizes.
+            Specialist hoarding construction for the ACT and Southern NSW.
+            Practical, professional and reliable hoarding solutions for
+            construction sites, commercial developments and projects of all
+            sizes.
           </p>
         </div>
 
@@ -23,7 +24,10 @@ export default function Footer() {
           <ul className="mt-5 space-y-3 text-sm">
             {nav.map((item) => (
               <li key={item.href}>
-                <Link href={item.href} className="transition-colors hover:text-white">
+                <Link
+                  href={item.href}
+                  className="transition-colors hover:text-white"
+                >
                   {item.label}
                 </Link>
               </li>

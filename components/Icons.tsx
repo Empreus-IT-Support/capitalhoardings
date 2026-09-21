@@ -8,7 +8,10 @@ const stroke = {
   strokeLinejoin: "round" as const,
 };
 
-function Frame({ className = "", children }: IconProps & { children: React.ReactNode }) {
+function Frame({
+  className = "",
+  children,
+}: IconProps & { children: React.ReactNode }) {
   return (
     <svg viewBox="0 0 32 32" fill={base} className={className} aria-hidden>
       {children}
@@ -57,7 +60,10 @@ export function IconPanel({ className }: IconProps) {
 export function IconShield({ className }: IconProps) {
   return (
     <Frame className={className}>
-      <path d="M16 4.5 6.5 8.2v7.1c0 6 4 10.8 9.5 12.2 5.5-1.4 9.5-6.2 9.5-12.2V8.2L16 4.5Z" {...stroke} />
+      <path
+        d="M16 4.5 6.5 8.2v7.1c0 6 4 10.8 9.5 12.2 5.5-1.4 9.5-6.2 9.5-12.2V8.2L16 4.5Z"
+        {...stroke}
+      />
       <path d="m12 15.8 3 3 5.5-5.6" {...stroke} />
     </Frame>
   );
@@ -66,7 +72,10 @@ export function IconShield({ className }: IconProps) {
 export function IconSparkle({ className }: IconProps) {
   return (
     <Frame className={className}>
-      <path d="m16 5 2.6 7.4L26 15l-7.4 2.6L16 25l-2.6-7.4L6 15l7.4-2.6L16 5Z" {...stroke} />
+      <path
+        d="m16 5 2.6 7.4L26 15l-7.4 2.6L16 25l-2.6-7.4L6 15l7.4-2.6L16 5Z"
+        {...stroke}
+      />
     </Frame>
   );
 }
@@ -102,7 +111,10 @@ export function IconHeight({ className }: IconProps) {
 export function IconFlame({ className }: IconProps) {
   return (
     <Frame className={className}>
-      <path d="M16 4s6.5 6 6.5 12.5a6.5 6.5 0 0 1-13 0C9.5 13 12 11 12 11s.5 3 2 3c2.2 0 2-6 2-10Z" {...stroke} />
+      <path
+        d="M16 4s6.5 6 6.5 12.5a6.5 6.5 0 0 1-13 0C9.5 13 12 11 12 11s.5 3 2 3c2.2 0 2-6 2-10Z"
+        {...stroke}
+      />
     </Frame>
   );
 }

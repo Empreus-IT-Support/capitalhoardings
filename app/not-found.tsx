@@ -8,8 +8,8 @@ export default function NotFound() {
       </p>
       <h1 className="mt-4 text-4xl">We couldn&apos;t find that page</h1>
       <p className="mt-5 text-muted">
-        The page you&apos;re after may have moved. Head back to the homepage or get in
-        touch and we&apos;ll point you in the right direction.
+        The page you&apos;re after may have moved. Head back to the homepage or
+        get in touch and we&apos;ll point you in the right direction.
       </p>
       <div className="mt-9 flex flex-wrap justify-center gap-4">
         <Link

@@ -4,6 +4,11 @@ import Image from "next/image";
  * Every photo on the site is a licensed stock placeholder (see README) standing
  * in for the client's own project photography. `note` records the shot the
  * client is expected to supply so the swap is obvious later.
+ *
+ * `fill` needs a positioned ancestor, so the wrapper is `relative` by default —
+ * but a caller that positions the wrapper itself (`absolute inset-0`) would end
+ * up with two competing `position` utilities and a zero-height box, so in that
+ * case we leave the positioning to them.
  */
 export default function Photo({
   src,
@@ -25,12 +30,17 @@ export default function Photo({
   priority?: boolean;
   overlay?: "none" | "bottom" | "side";
 }) {
+  const selfPositioned = /\b(absolute|fixed|sticky)\b/.test(className);
   const wash =
-    overlay === "bottom" ? "photo-wash" : overlay === "side" ? "photo-wash-side" : "";
+    overlay === "bottom"
+      ? "photo-wash"
+      : overlay === "side"
+        ? "photo-wash-side"
+        : "";
 
   return (
     <div
-      className={`relative overflow-hidden bg-navy-ink ${wash} ${className}`}
+      className={`${selfPositioned ? "" : "relative"} overflow-hidden bg-navy-ink ${wash} ${className}`}
       title={note}
     >
       <Image

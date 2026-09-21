@@ -6,7 +6,8 @@ type Status = "idle" | "sending" | "sent" | "error";
 
 const field =
   "mt-2 w-full rounded border border-line bg-white px-4 py-3 text-sm text-foreground placeholder:text-muted/60 focus:border-navy focus:outline-none";
-const label = "block text-xs font-semibold uppercase tracking-[0.16em] text-navy";
+const label =
+  "block text-xs font-semibold uppercase tracking-[0.16em] text-navy";
 
 export default function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
@@ -26,7 +27,8 @@ export default function ContactForm() {
         body: JSON.stringify(data),
       });
       const json = (await res.json()) as { ok?: boolean; error?: string };
-      if (!res.ok || !json.ok) throw new Error(json.error || "Something went wrong.");
+      if (!res.ok || !json.ok)
+        throw new Error(json.error || "Something went wrong.");
       form.reset();
       setStatus("sent");
     } catch (err) {
@@ -40,8 +42,8 @@ export default function ContactForm() {
       <div className="rounded border border-line bg-sky-soft p-8">
         <h3 className="text-xl">Thanks — we&apos;ve got your enquiry.</h3>
         <p className="mt-3 text-sm text-muted">
-          A member of the Capital Hoardings team will be in touch shortly to discuss
-          your hoarding requirements.
+          A member of the Capital Hoardings team will be in touch shortly to
+          discuss your hoarding requirements.
         </p>
         <button
           type="button"

@@ -34,7 +34,9 @@ export default function Logo({
       >
         <LogoMark className="h-11 w-auto shrink-0" />
         <span className="font-display leading-none text-white">
-          <span className="block text-2xl font-extrabold tracking-tight">CAPITAL</span>
+          <span className="block text-2xl font-extrabold tracking-tight">
+            CAPITAL
+          </span>
           <span className="mt-1 block text-[0.72rem] font-medium tracking-[0.36em] text-sky">
             HOARDINGS
           </span>

@@ -21,7 +21,7 @@ export default function SectionHeading({
           }`}
         >
           <span
-            className={`h-1.5 w-1.5 rotate-45 ${tone === "dark" ? "bg-sky" : "bg-navy/40"}`}
+            className={`diamond h-1.5 w-1.5 ${tone === "dark" ? "bg-sky" : "bg-navy/40"}`}
             aria-hidden
           />
           {eyebrow}
