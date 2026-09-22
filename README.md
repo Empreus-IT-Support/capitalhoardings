@@ -3,7 +3,7 @@
 Website for Capital Hoardings — specialist hoarding construction for the ACT and
 Southern NSW. Target domain: **www.capitalhoardings.com.au**.
 
-Next.js 16 (App Router) · TypeScript · Tailwind v4 · Resend for the contact form.
+Next.js 16 (App Router) · TypeScript · Tailwind v4 · Atlas for contact-form email.
 
 ```bash
 npm install
@@ -185,8 +185,23 @@ reach mail headers, and personal details are only logged in development.
 
 ## Contact form
 
-`POST /api/contact` → Resend. Fields match the brief exactly: name, number,
-email address, company, job location (postcode), message.
+`POST /api/contact` sends through **Atlas**, not Resend. Fields match the brief
+exactly: name, number, email address, company, job location (postcode), message.
+
+Atlas contract, taken from the key's "Show example" panel:
+
+| | |
+| --- | --- |
+| Endpoint | `POST https://atlascontrol.io/api/email/send` |
+| Auth | `Authorization: Bearer <key>` |
+| `from` | a **bare** address Atlas authorises for the key — `DoNotReply@` or `web@capitalhoardings.com.au`. A `Name <addr>` form is rejected with 403. |
+| `to` | must be on the key's allowlist (`office@capitalhoardings.com.au`) or 403 |
+| `reply_to` | the enquirer's address |
+
+The visitor's address never goes in `from`: we aren't authorised to send as
+their domain, so it would fail DMARC and be binned. Atlas's failures are 400
+(missing field), 401 (bad or revoked key), 403 (from or recipient out of scope),
+429, 503 (setup problem — retrying won't help) and 502.
 
 Validation runs on both sides with the same rules — the client shows per-field
 messages, sets `aria-invalid`/`aria-describedby`, and moves focus to the first
@@ -198,15 +213,15 @@ Protection: honeypot (`website` — note `company` is a real field here), per-IP
 rate limiting, body-size and content-type checks, and optional Cloudflare
 Turnstile that only activates once `TURNSTILE_SECRET_KEY` is set.
 
-Without `RESEND_API_KEY` the form still succeeds and logs the submission to the
-server console, so it is testable before mail is configured. Copy `.env.example`
-to `.env.local` and fill in:
+Without a key the form still succeeds and logs the submission in development,
+so it is testable before Atlas is configured. Copy `.env.example` to
+`.env.local` and fill in:
 
 | Variable | Purpose |
 | --- | --- |
-| `ATLAS_API_KEY` | Resend key, minted per client through Atlas (`RESEND_API_KEY` also accepted) |
-| `CONTACT_FROM` | verified sender on capitalhoardings.com.au |
-| `CONTACT_TO` | where enquiries go (defaults to `office@capitalhoardings.com.au`) |
+| `ATLAS_API_KEY` | per-client Atlas key (`ATLAS_EMAIL_KEY` also accepted) |
+| `CONTACT_FROM` | optional — bare authorised sender, defaults to `DoNotReply@capitalhoardings.com.au` |
+| `CONTACT_TO` | optional — defaults to `office@capitalhoardings.com.au` |
 
 ## Email addresses
 
@@ -217,5 +232,11 @@ both are already referenced in the footer and on `/contact`.
 ## Deployment
 
 Vercel, same as the other builds. Add the env vars above, attach
-`capitalhoardings.com.au` plus the `www` variant, and verify the domain in Resend
-so the form sends from the client's own domain.
+`capitalhoardings.com.au` plus the `www` variant, and publish the DNS records
+Atlas lists for the key so the sending domain verifies — until it does, Atlas
+reports "Domain not verified" and the form cannot deliver.
+
+**Watch the SPF record.** Atlas asks for `v=spf1 include:spf.protection.outlook.com -all`
+at the apex. A domain may only have one SPF record, so if the client already has
+one (they will if they use Microsoft 365 mail), the includes must be merged into
+a single record — publishing a second breaks SPF for all of their mail.

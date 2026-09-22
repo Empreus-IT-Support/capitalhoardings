@@ -1,12 +1,33 @@
 import { NextResponse } from "next/server";
-import { Resend } from "resend";
 import { site } from "@/lib/site";
 
-const TO = process.env.CONTACT_TO || site.email;
-// Use a Resend-verified sender on capitalhoardings.com.au for production;
-// onboarding@resend.dev works for testing before the domain is verified.
-const FROM =
-  process.env.CONTACT_FROM || "Capital Hoardings Website <onboarding@resend.dev>";
+/**
+ * Contact form delivery goes through Atlas (Empreus's platform), not Resend.
+ * The per-client Atlas key is minted under
+ * Clients > client > Documentation > API > Atlas, and is scoped to one sending
+ * domain plus a fixed recipient allowlist — a leaked key can't mail anywhere
+ * else. Atlas rejects anything outside that scope with a 403.
+ */
+const ATLAS_ENDPOINT =
+  process.env.ATLAS_ENDPOINT || "https://atlascontrol.io/api/email/send";
+
+/** Named ATLAS_API_KEY in Vercel; Atlas's own docs suggest ATLAS_EMAIL_KEY. */
+const ATLAS_KEY = () => process.env.ATLAS_API_KEY || process.env.ATLAS_EMAIL_KEY;
+
+/**
+ * Must be one of the addresses Atlas authorises for this key
+ * (DoNotReply@ or web@capitalhoardings.com.au) and a bare address — Atlas
+ * compares it exactly, so a "Name <addr>" form is rejected with a 403.
+ * The visitor's own address NEVER goes here: we aren't authorised to send as
+ * their domain, so it would fail DMARC and be binned. It goes in reply_to.
+ */
+const FROM = process.env.CONTACT_FROM || "DoNotReply@capitalhoardings.com.au";
+
+/** Must be on the key's allowlist in Atlas, or Atlas returns 403. */
+const TO = (process.env.CONTACT_TO || site.email)
+  .split(",")
+  .map((a) => a.trim())
+  .filter(Boolean);
 
 const isProd = process.env.NODE_ENV === "production";
 
@@ -63,6 +84,19 @@ async function turnstileOk(token: string, ip: string): Promise<boolean> {
 
 const bad = (error: string, status = 400) =>
   NextResponse.json({ ok: false, error }, { status });
+
+/**
+ * Atlas's documented failures. 401/403/503 are our misconfiguration, not the
+ * visitor's problem, so they all surface the same "email us instead" message
+ * while the detail goes to the server log.
+ */
+function atlasFailure(status: number, detail: string) {
+  console.error(`[contact] Atlas send failed ${status}: ${detail}`);
+  if (status === 429) {
+    return bad("Too many enquiries just now. Please try again shortly.", 429);
+  }
+  return bad("We couldn't send that just now. Please email us directly.", 502);
+}
 
 export async function POST(request: Request) {
   try {
@@ -125,16 +159,13 @@ export async function POST(request: Request) {
       return bad("Verification failed. Please try again.");
     }
 
-    // Keys for this site are minted through Atlas, so ATLAS_API_KEY is the name
-    // used in Vercel. RESEND_API_KEY stays supported as a fallback. Either way
-    // the value must be a Resend key (`re_...`) — this route talks to Resend.
-    const apiKey = process.env.ATLAS_API_KEY || process.env.RESEND_API_KEY;
+    const key = ATLAS_KEY();
 
     // No key configured yet — succeed so the form is testable. Log only in dev:
     // enquiries carry personal details and shouldn't sit in production logs.
-    if (!apiKey) {
+    if (!key) {
       if (!isProd) {
-        console.log("[contact] (no API key configured) submission:", {
+        console.log("[contact] (no Atlas key configured) submission:", {
           name,
           phone,
           email,
@@ -142,14 +173,12 @@ export async function POST(request: Request) {
           postcode,
         });
       } else {
-        console.warn(
-          "[contact] no ATLAS_API_KEY/RESEND_API_KEY — enquiry not delivered"
-        );
+        console.warn("[contact] no ATLAS_API_KEY — enquiry not delivered");
       }
       return NextResponse.json({ ok: true, delivered: false });
     }
 
-    const lines = [
+    const text = [
       `Name: ${name}`,
       `Number: ${phone}`,
       `Email: ${email}`,
@@ -159,21 +188,32 @@ export async function POST(request: Request) {
       message,
     ].join("\n");
 
-    const resend = new Resend(apiKey);
-    const { error } = await resend.emails.send({
-      from: FROM,
-      to: TO,
-      replyTo: email,
-      subject: `Website enquiry from ${name}${company ? ` — ${company}` : ""}`,
-      text: lines,
-    });
-
-    if (error) {
-      console.error("[contact] resend error:", error);
+    let res: Response;
+    try {
+      res = await fetch(ATLAS_ENDPOINT, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${key}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          from: FROM,
+          to: TO,
+          reply_to: email,
+          subject: `Website enquiry from ${name}${company ? ` — ${company}` : ""}`,
+          text,
+        }),
+      });
+    } catch (err) {
+      console.error("[contact] Atlas unreachable:", err);
       return bad(
         "We couldn't send that just now. Please email us directly.",
         502
       );
+    }
+
+    if (!res.ok) {
+      return atlasFailure(res.status, await res.text().catch(() => ""));
     }
 
     return NextResponse.json({ ok: true, delivered: true });
