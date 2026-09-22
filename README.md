@@ -204,7 +204,7 @@ to `.env.local` and fill in:
 
 | Variable | Purpose |
 | --- | --- |
-| `RESEND_API_KEY` | Resend API key |
+| `ATLAS_API_KEY` | Resend key, minted per client through Atlas (`RESEND_API_KEY` also accepted) |
 | `CONTACT_FROM` | verified sender on capitalhoardings.com.au |
 | `CONTACT_TO` | where enquiries go (defaults to `office@capitalhoardings.com.au`) |
 

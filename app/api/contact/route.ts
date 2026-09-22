@@ -125,13 +125,16 @@ export async function POST(request: Request) {
       return bad("Verification failed. Please try again.");
     }
 
-    const apiKey = process.env.RESEND_API_KEY;
+    // Keys for this site are minted through Atlas, so ATLAS_API_KEY is the name
+    // used in Vercel. RESEND_API_KEY stays supported as a fallback. Either way
+    // the value must be a Resend key (`re_...`) — this route talks to Resend.
+    const apiKey = process.env.ATLAS_API_KEY || process.env.RESEND_API_KEY;
 
     // No key configured yet — succeed so the form is testable. Log only in dev:
     // enquiries carry personal details and shouldn't sit in production logs.
     if (!apiKey) {
       if (!isProd) {
-        console.log("[contact] (no RESEND_API_KEY) submission:", {
+        console.log("[contact] (no API key configured) submission:", {
           name,
           phone,
           email,
@@ -139,7 +142,9 @@ export async function POST(request: Request) {
           postcode,
         });
       } else {
-        console.warn("[contact] RESEND_API_KEY missing — enquiry not delivered");
+        console.warn(
+          "[contact] no ATLAS_API_KEY/RESEND_API_KEY — enquiry not delivered"
+        );
       }
       return NextResponse.json({ ok: true, delivered: false });
     }
