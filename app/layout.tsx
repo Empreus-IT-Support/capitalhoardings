@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import ScrollProgress from "@/components/ScrollProgress";
 import { JsonLd, organisationLd, websiteLd } from "@/lib/seo";
 import { site } from "@/lib/site";
+import { indexable } from "./robots";
 
 const display = Barlow_Condensed({
   weight: ["600", "700", "800"],
@@ -49,11 +50,16 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
   category: "Construction",
   formatDetection: { telephone: true, address: false, email: true },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: { index: true, follow: true, "max-image-preview": "large" },
-  },
+  // robots.txt asks crawlers not to fetch; this tells any crawler that
+  // reaches a page anyway not to index it. Both are off until SITE_INDEXABLE
+  // is set — the site is pre-launch (client photos + phone number pending).
+  robots: indexable
+    ? {
+        index: true,
+        follow: true,
+        googleBot: { index: true, follow: true, "max-image-preview": "large" },
+      }
+    : { index: false, follow: false, nocache: true },
   openGraph: {
     type: "website",
     url: site.url,
