@@ -82,7 +82,7 @@ export default function SystemPage() {
               distance={16}
             >
               <div className="group h-full bg-white px-6 py-8 transition-colors duration-500 hover:bg-sky-soft">
-                <dt className="eyebrow text-navy/55">{spec.label}</dt>
+                <dt className="eyebrow text-navy/75">{spec.label}</dt>
                 <dd className="mt-3 font-display text-3xl font-bold text-navy">
                   <CharReveal text={spec.value} delay={i * 90 + 120} />
                 </dd>

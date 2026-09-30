@@ -42,7 +42,8 @@ export default function CharReveal({
   }, []);
 
   return (
-    <span ref={ref} className={className} aria-label={text}>
+    <span ref={ref} className={className}>
+      <span className="sr-only">{text}</span>
       {text.split("").map((char, i) => (
         <span
           key={`${char}-${i}`}

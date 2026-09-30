@@ -44,7 +44,7 @@ export default function ContactPage() {
 
           <dl className="mt-9 grid gap-px bg-line">
             <div className="bg-white py-5">
-              <dt className="eyebrow text-navy/55">Phone</dt>
+              <dt className="eyebrow text-navy/75">Phone</dt>
               <dd className="mt-2 text-lg text-foreground">
                 {site.phone ? (
                   <a
@@ -59,7 +59,7 @@ export default function ContactPage() {
               </dd>
             </div>
             <div className="bg-white py-5">
-              <dt className="eyebrow text-navy/55">General enquiries</dt>
+              <dt className="eyebrow text-navy/75">General enquiries</dt>
               <dd className="mt-2">
                 <a
                   href={`mailto:${site.email}`}
@@ -70,7 +70,7 @@ export default function ContactPage() {
               </dd>
             </div>
             <div className="bg-white py-5">
-              <dt className="eyebrow text-navy/55">Accounts</dt>
+              <dt className="eyebrow text-navy/75">Accounts</dt>
               <dd className="mt-2">
                 <a
                   href={`mailto:${site.accountsEmail}`}
@@ -81,7 +81,7 @@ export default function ContactPage() {
               </dd>
             </div>
             <div className="bg-white py-5">
-              <dt className="eyebrow text-navy/55">Servicing</dt>
+              <dt className="eyebrow text-navy/75">Servicing</dt>
               <dd className="mt-2 text-lg text-foreground">{site.region}</dd>
             </div>
           </dl>
@@ -108,7 +108,7 @@ export default function ContactPage() {
         </div>
 
         <div className="border border-line bg-panel p-8 sm:p-12">
-          <p className="eyebrow text-navy/55">Enquiry</p>
+          <p className="eyebrow text-navy/75">Enquiry</p>
           <h2 className="mt-3 text-3xl">Send us the details</h2>
           <p className="mt-3 text-sm text-muted">
             Fill in the form below and a member of our team will get back to

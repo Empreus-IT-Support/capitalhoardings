@@ -121,7 +121,7 @@ export default function AboutPage() {
         <div className="grid gap-px bg-line md:grid-cols-2">
           <Reveal direction="right" distance={30} className="bg-white">
             <article className="h-full p-10 sm:p-12">
-              <p className="eyebrow text-navy/55">Standards</p>
+              <p className="eyebrow text-navy/75">Standards</p>
               <h2 className="mt-4 text-3xl sm:text-4xl">
                 Quality you can rely on
               </h2>

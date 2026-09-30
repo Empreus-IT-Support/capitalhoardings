@@ -90,7 +90,7 @@ export default function Home() {
           </Reveal>
 
           {/* Credential strip — sits on the hero's bottom edge like a panel rail */}
-          <ul className="mt-14 grid gap-px border-t border-white/15 bg-white/10 sm:grid-cols-3">
+          <div className="mt-14 grid gap-px border-t border-white/15 bg-white/10 sm:grid-cols-3">
             {heroCredentials.map((item, i) => (
               <Reveal
                 key={item}
@@ -98,16 +98,16 @@ export default function Home() {
                 direction="up"
                 distance={14}
               >
-                <li className="flex h-full items-center gap-3 bg-navy-ink/80 px-5 py-4 text-sm text-white/80 backdrop-blur-sm">
+                <div className="flex h-full items-center gap-3 bg-navy-ink/80 px-5 py-4 text-sm text-white/80 backdrop-blur-sm">
                   <span
                     className="h-1.5 w-1.5 shrink-0 rotate-45 bg-sky"
                     aria-hidden
                   />
                   {item}
-                </li>
+                </div>
               </Reveal>
             ))}
-          </ul>
+          </div>
         </div>
       </section>
 
@@ -213,7 +213,7 @@ export default function Home() {
               intro="We utilise the TITAN Hoarding System — Australian-made, modular and freestanding, providing effective site separation without traditional ground penetration or ceiling fixings."
               tone="dark"
             />
-            <ul className="mt-9 grid gap-px bg-white/15 sm:grid-cols-2">
+            <div className="mt-9 grid gap-px bg-white/15 sm:grid-cols-2">
               {titanPoints.map((item, i) => {
                 const Icon = Icons[item.icon as keyof typeof Icons];
                 return (
@@ -223,14 +223,14 @@ export default function Home() {
                     direction="up"
                     distance={16}
                   >
-                    <li className="group flex h-full items-center gap-4 bg-navy-ink px-5 py-5 text-sm text-white/85 transition-colors duration-500 hover:bg-navy">
+                    <div className="group flex h-full items-center gap-4 bg-navy-ink px-5 py-5 text-sm text-white/85 transition-colors duration-500 hover:bg-navy">
                       <Icon className="h-6 w-6 shrink-0 text-sky transition-transform duration-500 group-hover:-translate-y-1 group-hover:rotate-6" />
                       {item.label}
-                    </li>
+                    </div>
                   </Reveal>
                 );
               })}
-            </ul>
+            </div>
             <Reveal delay={420}>
               <Link
                 href="/system"

@@ -17,7 +17,7 @@ export default function SectionHeading({
       {eyebrow && (
         <p
           className={`eyebrow flex items-center gap-3 ${centred ? "justify-center" : ""} ${
-            tone === "dark" ? "text-sky" : "text-navy/55"
+            tone === "dark" ? "text-sky" : "text-navy/75"
           }`}
         >
           <span

@@ -19,7 +19,7 @@ export default function Marquee({ reverse = false }: { reverse?: boolean }) {
             {items.map((item) => (
               <span
                 key={item}
-                className="flex items-center gap-8 whitespace-nowrap px-8 text-sm font-semibold uppercase tracking-[0.18em] text-navy/70"
+                className="flex items-center gap-8 whitespace-nowrap px-8 text-sm font-semibold uppercase tracking-[0.18em] text-navy/80"
               >
                 {item}
                 <span className="h-1.5 w-1.5 rotate-45 bg-sky" />

@@ -77,7 +77,7 @@ export default function ServicesPage() {
                     />
                   </Reveal>
                   <div className={flipped ? "lg:order-1" : ""}>
-                    <p className="eyebrow flex items-center gap-3 text-navy/55">
+                    <p className="eyebrow flex items-center gap-3 text-navy/75">
                       <span
                         className="h-1.5 w-1.5 rotate-45 bg-navy/40"
                         aria-hidden

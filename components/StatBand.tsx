@@ -30,7 +30,7 @@ export default function StatBand() {
                 aria-hidden
                 className="mt-4 block h-[3px] w-8 bg-sky transition-all duration-500 group-hover:w-16"
               />
-              <p className="mt-3 text-sm text-sky">{stat.label}</p>
+              <p className="mt-3 text-sm text-sky-bright">{stat.label}</p>
             </div>
           </Reveal>
         ))}
