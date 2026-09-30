@@ -97,7 +97,7 @@ export default function Process() {
                 className="absolute left-0 top-0 h-1 bg-sky transition-all duration-700 lg:hidden"
                 style={{ width: shown ? "100%" : 0, opacity: 1 - i * 0.14 }}
               />
-              <span className="font-display text-sm font-bold tracking-widest text-sky">
+              <span className="font-display text-sm font-bold tracking-widest text-navy">
                 STEP {i + 1}
               </span>
               <h3 className="mt-2 text-2xl transition-transform duration-500 group-hover:translate-x-1">
