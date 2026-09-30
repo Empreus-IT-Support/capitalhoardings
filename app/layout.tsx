@@ -7,6 +7,7 @@ import ScrollProgress from "@/components/ScrollProgress";
 import { JsonLd, organisationLd, websiteLd } from "@/lib/seo";
 import { site } from "@/lib/site";
 import { indexable } from "./robots";
+import { Analytics } from "@vercel/analytics/react";
 
 const display = Barlow_Condensed({
   weight: ["600", "700", "800"],
@@ -109,6 +110,7 @@ export default function RootLayout({
           {children}
         </main>
         <Footer />
+        <Analytics />
       </body>
     </html>
   );
